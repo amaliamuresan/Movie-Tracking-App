@@ -1,7 +1,7 @@
 package com.server.restservice.controller;
 
+import com.server.restservice.models.User;
 import com.server.restservice.service.UserService;
-import com.server.restservice.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
