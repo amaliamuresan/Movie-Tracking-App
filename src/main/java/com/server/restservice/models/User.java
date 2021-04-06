@@ -1,11 +1,19 @@
 package com.server.restservice.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class User {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String name;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String username;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String uid;
 
     public String getUid() {

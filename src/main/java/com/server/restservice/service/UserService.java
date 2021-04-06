@@ -1,5 +1,10 @@
 package com.server.restservice.service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.json.Json;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,6 +14,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import com.server.restservice.data.ServerData;
 import com.server.restservice.operation.JsonOperation;
 import com.server.restservice.models.User;
+import io.grpc.Server;
 import org.springframework.stereotype.Service;
 
 import java.util.Hashtable;
@@ -28,6 +34,19 @@ public class UserService {
         System.out.println(documents.size());
         return documents.isEmpty();
 
+    }
+
+    public boolean checkLegitUser(User user, String token) {
+        System.out.println(token);
+        System.out.println("This is the uid " + user.getUid());
+        if(token == null)
+            return false;
+        if(user.getUid() == null)
+            return false;
+        else {
+            String serverToken = ServerData.getToken(user.getUid());
+            return serverToken != null && serverToken.equals(token);
+        }
     }
 
     public Object saveUser(User user) {
@@ -72,12 +91,28 @@ public class UserService {
         }
     }
 
-    public String updateUser(User user) throws ExecutionException, InterruptedException {
-        Firestore dbFirestore = FirestoreClient.getFirestore();
-        //ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getName()).set(user);
-        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getUid()).set(user);
+    public Object updateUser(User user, String token) throws ExecutionException, InterruptedException {
+        String jsonBody;
+        JsonNode node;
+        if(!checkLegitUser(user, token)) {
+            return JsonOperation.createJson("Error", "Invalid user id or user token");
+        }
+        /* NON NULLABLE FIELDS!
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        try {
+            jsonBody = mapper.writeValueAsString(user);
+            node = mapper.readTree(jsonBody);
 
-        return collectionApiFuture.get().getUpdateTime().toString();
+        } catch (JsonProcessingException e) {
+            return JsonOperation.createJson("Error", "Invalid user structure");
+        }*/
+
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getName()).set(user);
+        //ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getUid()).set(node);
+
+        return JsonOperation.createJson("Success","Account updated successfully");
     }
 
     public Object loginUser(User user) throws ExecutionException, InterruptedException, FirebaseAuthException {

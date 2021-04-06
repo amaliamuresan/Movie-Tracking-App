@@ -29,8 +29,8 @@ public class UserController {
         return userService.getUserDetails(name);
     }
 
-    @PutMapping("/users/update")
-    public String update(@RequestBody User user) throws ExecutionException, InterruptedException {
-        return userService.updateUser(user);
+    @PutMapping("/users/update/{token}")
+    public Object update(@PathVariable String token, @RequestBody User user) throws ExecutionException, InterruptedException {
+        return userService.updateUser(user,token);
     }
 }
