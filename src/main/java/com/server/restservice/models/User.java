@@ -15,6 +15,12 @@ public class User {
     private String username;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String uid;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String token = null;
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getUid() {
         return uid;

@@ -109,8 +109,8 @@ public class UserService {
         }*/
 
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getName()).set(user);
-        //ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getUid()).set(node);
+        //ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getName()).set(user);
+        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getUid()).set(user);
 
         return JsonOperation.createJson("Success","Account updated successfully");
     }
@@ -134,11 +134,15 @@ public class UserService {
             ServerData.addToken(remoteUser.getUid(),token);
             System.out.println(token);
 
-            Hashtable<String, String> returnData = new Hashtable<>();
-            returnData.put("token",token);
-            returnData.put("uid",remoteUser.getUid());
 
-            return JsonOperation.createJson(returnData);
+            Hashtable<String, String> returnData = new Hashtable<>();
+
+           /* returnData.put("token",token);
+            returnData.put("uid", remoteUser.getUid());
+
+            return JsonOperation.createJson(returnData);*/
+            remoteUser.setToken(token);
+            return remoteUser;
         }
         else{
             return JsonOperation.createJson("Error", "Invalid credentials");
