@@ -42,6 +42,7 @@ class AuthEpics {
             .asyncMap((Register$ action) => _api.register(
                   email: action.email,
                   password: action.password,
+                  displayName: action.displayName,
                 ))
             .expand((AppUser user) => <AppAction>[
                   Register.successful(user),

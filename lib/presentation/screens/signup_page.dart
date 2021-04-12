@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:movie_app/actions/index.dart';
+import 'package:movie_app/actions/register.dart';
+import 'package:movie_app/models/states/app_state.dart';
 import 'package:movie_app/routes/routes.dart';
+import 'package:toast/toast.dart';
 
 // ignore: must_be_immutable
 class SignUpPage extends StatelessWidget {
@@ -133,7 +138,24 @@ class SignUpPage extends StatelessWidget {
                     width: double.infinity,
                     height: 45,
                     child: ElevatedButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            try{
+                              StoreProvider.of<AppState>(context).dispatch(
+                                Register(
+                                  email: email,
+                                  password: password,
+                                  displayName: displayName,
+                                  response: (action) {
+                                    _onResponse(context, action);
+                                  },
+                                ),
+                              );
+                            }catch(e){
+                              print('Eroare la dispatch $e');
+                            }
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                             primary: Color.fromRGBO(238, 108, 77, 1)
                         ),
@@ -177,5 +199,21 @@ class SignUpPage extends StatelessWidget {
           ),
         )
     );
+  }
+
+  void _onResponse(BuildContext context, AppAction action) {
+    print("On response");
+    if (action is RegisterSuccessful) {
+      print('Register successs!!!!');
+      //Navigator.pushNamed(context, '/home');
+    } else {
+      if (action is RegisterError) {
+        print(action.error);
+        Toast.show("Invalid credentials", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      } else
+        Toast.show("Alt toast", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+    }
   }
 }

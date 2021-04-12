@@ -11,7 +11,7 @@ class AppApi {
   final http.Client _client;
 
   Future<AppUser> login({String email, String password}) async {
-    final Uri url = Uri(scheme: 'http', host: '192.168.1.2', port: 8080, pathSegments: <String>[
+    final Uri url = Uri(scheme: 'https', host: '192.168.1.2', port: 8080, pathSegments: <String>[
       'api',
       'users',
       'login',
@@ -20,29 +20,28 @@ class AppApi {
     final response = await http.post(
       url,
       headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type': 'application/json',
       },
       body: jsonEncode(<String, String>{
         'email': email,
         'password':password,
       }),
     );
-    if (response.statusCode == 201) {
-      print('Print from api.dart ${response.body}');
-      return AppUser.fromJson(jsonDecode(response.body));
+    if (response.body != null) {
+        print('Print from api.dart ${response.body}');
+      if(AppUser.fromJson(jsonDecode(response.body)).uid == null) {
+        throw Exception('Error while getting the user ${response.body}');
+      }
+      else {
+        return AppUser.fromJson(jsonDecode(response.body));
+      }
     } else {
       throw Exception('Error while getting the user');
     }
-
-    /*return AppUser.fromJson({
-      'uid' : '32uhr7fg38f',
-      'email' : 'user1@company.com',
-      'password' : '123456',
-    });*/
   }
 
-  Future<AppUser> register({@required String email, @required String password}) async {
-    final Uri url = Uri(scheme: 'https', host: '8080', pathSegments: <String>[
+  Future<AppUser> register({@required String email, @required String password, @required String displayName}) async {
+    final Uri url = Uri(scheme: 'https', host: '192.168.1.2', port: 8080, pathSegments: <String>[
       'api',
       'users',
       'register',
@@ -51,16 +50,21 @@ class AppApi {
     final response = await http.post(
       url,
       headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type': 'application/json',
       },
       body: jsonEncode(<String, String>{
         'email': email,
         'password':password,
+        'displayName' : displayName,
       }),
     );
-    if (response.statusCode == 201) {
-      print('Print from api.dart ${response.body}');
+    if (response.body != null) {
+      if(AppUser.fromJson(jsonDecode(response.body)).uid == null) {
+        throw Exception('Error while getting the user ${response.body}');
+      }
+      else {
       return AppUser.fromJson(jsonDecode(response.body));
+      }
     } else {
       throw Exception('Error while getting the user');
     }
