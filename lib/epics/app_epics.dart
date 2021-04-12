@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:movie_app/data/api.dart';
 import 'package:movie_app/epics/auth_epics.dart';
+import 'package:movie_app/epics/movies_epics.dart';
 import 'package:movie_app/models/states/app_state.dart';
 import 'package:redux_epics/redux_epics.dart';
 
@@ -15,6 +16,7 @@ class AppEpics {
   Epic<AppState> get epics {
     return combineEpics(<Epic<AppState>>[
       AuthEpics(api: _api).epics,
+      MoviesEpics(api : _api).epics,
     ]);
   }
 }

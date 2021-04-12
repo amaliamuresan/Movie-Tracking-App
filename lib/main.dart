@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:movie_app/actions/get_movies.dart';
 import 'package:movie_app/data/api.dart';
 import 'package:movie_app/epics/app_epics.dart';
 import 'package:movie_app/models/states/app_state.dart';
@@ -32,7 +33,7 @@ void main() {
     middleware: <Middleware<AppState>>[
       EpicMiddleware<AppState>(appEpics.epics),
     ],
-  );
+  )..dispatch(GetMovies());
   runApp(MyApp(store: store,));
 }
 

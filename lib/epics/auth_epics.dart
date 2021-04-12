@@ -23,7 +23,7 @@ class AuthEpics {
   }
 
   Stream<AppAction> _login(Stream<Login$> actions, EpicStore<AppState> store) {
-    print('Am ajuns in apic login');
+    //print('Am ajuns in apic login');
     return actions //
         .flatMap((Login$ action) => Stream<Login$>.value(action)
             .asyncMap((Login$ action) =>
