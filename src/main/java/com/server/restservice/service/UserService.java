@@ -137,12 +137,12 @@ public class UserService {
 
             Hashtable<String, String> returnData = new Hashtable<>();
 
-           /* returnData.put("token",token);
+           returnData.put("token",token);
             returnData.put("uid", remoteUser.getUid());
 
-            return JsonOperation.createJson(returnData);*/
-            remoteUser.setToken(token);
-            return remoteUser;
+            return JsonOperation.createJson(returnData);
+            //remoteUser.setToken(token);
+            //return remoteUser;
         }
         else{
             return JsonOperation.createJson("Error", "Invalid credentials");
