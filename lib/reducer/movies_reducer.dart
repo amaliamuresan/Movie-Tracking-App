@@ -6,6 +6,10 @@ Reducer<MoviesState> moviesReducer = combineReducers(<Reducer<MoviesState>>[
   TypedReducer<MoviesState, GetMoviesSuccessful>(_getMoviesSuccessful),
 ]);
 
-MoviesState _getMoviesSuccessful(MoviesState state, GetMoviesSuccessful action) {
-  return state.rebuild((MoviesStateBuilder b) => b.movies = action.movies.toBuilder());
+MoviesState _getMoviesSuccessful(
+    MoviesState state, GetMoviesSuccessful action) {
+  return state.rebuild((MoviesStateBuilder b) =>
+  b
+    ..movies = action.movies.toBuilder()
+    ..page = b.page + 1);
 }

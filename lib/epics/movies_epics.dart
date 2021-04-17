@@ -25,7 +25,7 @@ class MoviesEpics {
     return actions //
         .flatMap((GetMovies$ action) =>
         Stream<GetMovies$>.value(action)
-            .asyncMap((GetMovies$ action) => _api.getMovies())
+            .asyncMap((GetMovies$ action) => _api.getMovies(store.state.moviesState.genre, store.state.moviesState.page))
             .map((BuiltList<Movie> movies) => GetMovies.successful(movies))
             .onErrorReturnWith((dynamic error) => GetMovies.error(error)));
   }

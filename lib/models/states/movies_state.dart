@@ -9,8 +9,13 @@ import 'auth_state.dart';
 part 'movies_state.g.dart';
 
 abstract class MoviesState implements Built<MoviesState, MoviesStateBuilder> {
+
+  factory MoviesState([void Function(MoviesStateBuilder) updates]) = _$MoviesState;
+
   factory MoviesState.initialState() {
-    return _$MoviesState((b) {});
+    final MoviesStateBuilder builder = MoviesStateBuilder();
+    builder.page = 1;
+    return builder.build();
   }
 
   factory MoviesState.fromJson(dynamic json) => serializers.deserializeWith(serializer, json);
@@ -19,6 +24,12 @@ abstract class MoviesState implements Built<MoviesState, MoviesStateBuilder> {
 
   @nullable
   BuiltList<Movie> get movies;
+
+  @nullable
+  String get genre;
+
+  @nullable
+  int get page;
 
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this) as Map<String, dynamic>;
 

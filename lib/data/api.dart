@@ -74,7 +74,7 @@ class AppApi {
     }
   }
 
-  Future<BuiltList<Movie>> getMovies() async {
+  Future<BuiltList<Movie>> getMovies(String genre, int page) async {
     print('Am ajuns in api getMovies()');
     final Uri url = Uri(scheme: 'https',
         host: '192.168.1.7',
@@ -86,6 +86,10 @@ class AppApi {
         ],
         queryParameters: <String, String>{
           'type' : 'popularity',
+          'page': '$page',
+          if ( genre != null) 'genre' : genre,
+
+
           });
 
     final Response response = await _client.get(url);
