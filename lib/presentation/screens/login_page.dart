@@ -177,15 +177,15 @@ class LoginPage extends StatelessWidget {
   void _onResponse(BuildContext context, AppAction action) {
     print("On response");
     if (action is LoginSuccessful) {
+      Navigator.pushNamed(context, AppRoutes.home);
       print('Login successs!!!!');
-      //Navigator.pushNamed(context, '/home');
     } else {
       if (action is LoginError) {
         print(action.error);
         Toast.show("Invalid credentials", context,
             duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
       } else
-        Toast.show("Alt toast", context,
+        Toast.show("App Error", context,
             duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
     }
   }

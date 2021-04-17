@@ -14,27 +14,30 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   Movie._();
 
+  @nullable
+  int get id;
+
+  @nullable
   String get title;
 
+  @nullable
   int get year;
 
+  @nullable
   num get rating;
 
+  @nullable
   int get runtime;
 
+  @nullable
   BuiltList<String> get genres;
 
   @nullable
   String get summary;
 
-  @BuiltValueField(wireName: 'background_image')
-  String get backgroundImage;
+  @nullable
+  String get poster_path;
 
-  @BuiltValueField(wireName: 'medium_cover_image')
-  String get mediumCoverImage;
-
-  @BuiltValueField(wireName: 'large_cover_image')
-  String get largeCoverImage;
-
+  Map<String, dynamic> get json => serializers.serializeWith(serializer, this) as Map<String, dynamic>;
   static Serializer<Movie> get serializer => _$movieSerializer;
 }

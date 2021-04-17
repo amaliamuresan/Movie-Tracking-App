@@ -14,7 +14,7 @@ class AppApi {
   final http.Client _client;
 
   Future<AppUser> login({String email, String password}) async {
-    final Uri url = Uri(scheme: 'https', host: '192.168.1.2', port: 8080, pathSegments: <String>[
+    final Uri url = Uri(scheme: 'https', host: '192.168.1.7', port: 8080, pathSegments: <String>[
       'api',
       'users',
       'login',
@@ -44,7 +44,7 @@ class AppApi {
   }
 
   Future<AppUser> register({@required String email, @required String password, @required String displayName}) async {
-    final Uri url = Uri(scheme: 'https', host: '192.168.1.2', port: 8080, pathSegments: <String>[
+    final Uri url = Uri(scheme: 'https', host: '192.168.1.7', port: 8080, pathSegments: <String>[
       'api',
       'users',
       'register',
@@ -77,22 +77,27 @@ class AppApi {
   Future<BuiltList<Movie>> getMovies() async {
     print('Am ajuns in api getMovies()');
     final Uri url = Uri(scheme: 'https',
-        host: '192.168.1.2',
+        host: '192.168.1.7',
         port: 8080,
         pathSegments: <String>[
-          'movies',
+          'api',
+          'tmdb',
+          'discover_movie'
         ],
         queryParameters: <String, String>{
-          'type' : 'movie',
-          //'page' : '1',
+          'type' : 'popularity',
           });
 
     final Response response = await _client.get(url);
     final String body = response.body;
-    print('movies: ${response.body}');
-    final String list = jsonDecode(body)['Title'];
-    print(list);
-    //list.map((dynamic json) => Movie.fromJson(json));
-    return new BuiltList<Movie>();
+    final List<dynamic> list = jsonDecode(body);
+
+    List<Movie> aux = [];
+    for(int i = 0; i < list.length; i+=1) {
+      aux.add(Movie.fromJson(list[i]));
+    }
+    BuiltList<Movie> ret = ListBuilder<Movie>(aux).build();
+    //print(ret);
+    return ret;
   }
 }

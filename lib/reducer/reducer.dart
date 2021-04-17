@@ -12,6 +12,6 @@ AppState _reducer(AppState state, dynamic action) {
   return state.rebuild((AppStateBuilder b) {
     b
       ..authState = authReducer(state.authState, action).toBuilder()
-        ..moviesState = moviesReducer(state.moviesState, action).toBuilder();
+      ..moviesState = moviesReducer(state.moviesState, action).toBuilder();
   });
 }
