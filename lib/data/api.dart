@@ -87,7 +87,7 @@ class AppApi {
         queryParameters: <String, String>{
           'type' : 'popularity',
           'page': '$page',
-          if ( genre != null) 'genre' : genre,
+          if ( genre != 'All' && genre != null) 'genre' : genre,
 
 
           });

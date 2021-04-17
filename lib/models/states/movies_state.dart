@@ -4,21 +4,24 @@ import 'package:built_value/serializer.dart';
 
 import '../movie.dart';
 import '../serializers.dart';
-import 'auth_state.dart';
 
 part 'movies_state.g.dart';
 
 abstract class MoviesState implements Built<MoviesState, MoviesStateBuilder> {
-
-  factory MoviesState([void Function(MoviesStateBuilder) updates]) = _$MoviesState;
+  factory MoviesState([void Function(MoviesStateBuilder) updates]) =
+      _$MoviesState;
 
   factory MoviesState.initialState() {
     final MoviesStateBuilder builder = MoviesStateBuilder();
-    builder.page = 1;
+    builder
+      ..page = 1
+      ..genre = 'All';
+
     return builder.build();
   }
 
-  factory MoviesState.fromJson(dynamic json) => serializers.deserializeWith(serializer, json);
+  factory MoviesState.fromJson(dynamic json) =>
+      serializers.deserializeWith(serializer, json);
 
   MoviesState._();
 
@@ -31,7 +34,8 @@ abstract class MoviesState implements Built<MoviesState, MoviesStateBuilder> {
   @nullable
   int get page;
 
-  Map<String, dynamic> get json => serializers.serializeWith(serializer, this) as Map<String, dynamic>;
+  Map<String, dynamic> get json =>
+      serializers.serializeWith(serializer, this) as Map<String, dynamic>;
 
   static Serializer<MoviesState> get serializer => _$moviesStateSerializer;
 }
