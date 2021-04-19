@@ -18,7 +18,7 @@ public class SearchMovie {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String poster_path;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private int id;
+    private String id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;
     @JsonInclude
@@ -36,12 +36,12 @@ public class SearchMovie {
         this.poster_path = ServerData.getTmdbImageUrl() + poster_path;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.id = String.valueOf(id);
     }
 
     public String getTitle() {
