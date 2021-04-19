@@ -70,96 +70,97 @@ class HomePage extends StatelessWidget {
         backgroundColor: Color.fromRGBO(29, 52, 97, 1),
       ),
       body: SingleChildScrollView(
-          controller: controller,
-          child: MoviesContainer(
-            builder: (BuildContext context, BuiltList<Movie> movies) {
-              return (movies.length > 0 ||
-                      StoreProvider.of<AppState>(context)
+        controller: controller,
+        child: MoviesContainer(
+          builder: (BuildContext context, BuiltList<Movie> movies) {
+            return (movies.length > 0 ||
+                    StoreProvider.of<AppState>(context)
+                            .state
+                            .moviesState
+                            .page !=
+                        0)
+                ? Column(
+                    children: <Widget>[
+                      SizedBox(height: 8),
+                      GenreContainer(
+                        builder: (BuildContext context, String genre) {
+                          return DropdownButton<String>(
+                            onChanged: (String value) {
+                              StoreProvider.of<AppState>(context)
+                                ..dispatch(UpdateGenre(value))
+                                ..dispatch(const GetMovies());
+                            },
+                            value: genre,
+                            items: genres.map(
+                              (String genre) {
+                                return DropdownMenuItem<String>(
+                                  value: genre,
+                                  child: Text(genre),
+                                );
+                              },
+                            ).toList(),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      GridView.builder(
+                        itemCount: movies.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 0.75,
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 4.0,
+                          mainAxisSpacing: 16.0,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            child: GestureDetector(
+                              onTap: () async {
+                                await StoreProvider.of<AppState>(context)
+                                    .dispatch(ViewMovie(
+                                        (movies[index].id).toString()));
+                                Navigator.pushNamed(context, AppRoutes.movie);
+                              },
+                              child: Image(
+                                image: NetworkImage(movies[index].poster_path),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      pageState(
+                          StoreProvider.of<AppState>(context)
                               .state
                               .moviesState
-                              .page !=
-                          0)
-                  ? Column(
-                      children: <Widget>[
-                        SizedBox(height: 8),
-                        GenreContainer(
-                          builder: (BuildContext context, String genre) {
-                            return DropdownButton<String>(
-                              onChanged: (String value) {
-                                StoreProvider.of<AppState>(context)
-                                  ..dispatch(UpdateGenre(value))
-                                  ..dispatch(const GetMovies());
-                              },
-                              value: genre,
-                              items: genres.map(
-                                (String genre) {
-                                  return DropdownMenuItem<String>(
-                                    value: genre,
-                                    child: Text(genre),
-                                  );
-                                },
-                              ).toList(),
-                            );
-                          },
+                              .page,
+                          context),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Image(
+                        image: AssetImage('assets/not_found.png'),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'No movies found',
+                        style: TextStyle(
+                          color: Color.fromRGBO(29, 52, 97, 1),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
-                        SizedBox(height: 16),
-                        GridView.builder(
-                          itemCount: movies.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.75,
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 4.0,
-                            mainAxisSpacing: 16.0,
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              child: GestureDetector(
-                                onTap: () async {
-                                   await StoreProvider.of<AppState>(context).dispatch(ViewMovie((movies[index].id).toString()));
-                                  Navigator.pushNamed(context, AppRoutes.movie);
-                                },
-                                child: Image(
-                                  image:
-                                      NetworkImage(movies[index].poster_path),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        pageState(
-                            StoreProvider.of<AppState>(context)
-                                .state
-                                .moviesState
-                                .page,
-                            context),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 60,
-                        ),
-                        Image(
-                          image: AssetImage('assets/not_found.png'),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'No movies found',
-                          style: TextStyle(
-                            color: Color.fromRGBO(29, 52, 97, 1),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        )
-                      ],
-                    );
-            },
-          )),
+                      )
+                    ],
+                  );
+          },
+        ),
+      ),
     );
   }
 

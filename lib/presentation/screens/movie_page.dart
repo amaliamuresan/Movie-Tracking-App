@@ -16,9 +16,10 @@ class MoviePage extends StatelessWidget {
       ),
       body: MovieContainer(
         builder: (BuildContext context, Movie movie) {
-          (movie != null)
+          //while(movie == null)  (context as Element).markNeedsBuild();
+
           return SingleChildScrollView(
-            child: Center(
+            child: (movie != null) ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,8 +32,7 @@ class MoviePage extends StatelessWidget {
                           image: DecorationImage(
                             fit: BoxFit.fill,
                             image: NetworkImage(
-                              'https://image.tmdb.org/t/p/w500/pcDc2WJAYGJTTvRSEIpRZwM3Ola.jpg',
-                                //movie.backdrop_path
+                              movie.backdrop_path,
                                ),
                           ),
                         ),
@@ -231,8 +231,8 @@ class MoviePage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ) :  Text('Eroare');
+            ) : Text('Eroare'),
+          );
 
         }
       ),
