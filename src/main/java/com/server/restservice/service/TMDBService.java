@@ -106,7 +106,22 @@ public class TMDBService {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(jsonBody);
         jsonBody = node.get("results").toString();
-        return mapper.readValue(jsonBody, SearchMovie[].class);
+
+
+        SearchMovie[] movieList = mapper.readValue(jsonBody, SearchMovie[].class);
+        if(movieList == null)
+            return null;
+        List<SearchMovie> copyList = new ArrayList<>();
+
+        for(SearchMovie movie:movieList){
+            if(!movie.getPoster_path().equals(ServerData.getTmdbImageUrl()+"null")) {
+                copyList.add(movie);
+            }
+        }
+        SearchMovie[] finalList = new SearchMovie[copyList.size()];
+        copyList.toArray(finalList);
+        //return mapper.readValue(jsonBody, SearchMovie[].class);
+        return finalList;
     }
 
     public static List<CastMember> getMovieCast(String movieId) throws JsonProcessingException {

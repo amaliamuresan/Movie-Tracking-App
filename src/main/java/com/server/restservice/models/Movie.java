@@ -21,6 +21,8 @@ public class Movie {
     private String overview;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String poster_path;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String backdrop_path;
     @JsonInclude
     private List<String> genres = new ArrayList<>();
     @JsonInclude
@@ -98,6 +100,14 @@ public class Movie {
     public void settImdbRating(String imdbRating) {
         this.imdbRating = imdbRating;
         this.imdbRating = this.imdbRating.replace("\"","");
+    }
+
+    public String getBackdrop_path() {
+        return backdrop_path;
+    }
+
+    public void setBackdrop_path(String backdrop_path) {
+        this.backdrop_path = ServerData.getTmdbImageUrl() + backdrop_path;
     }
 
     @JsonProperty("genres")
