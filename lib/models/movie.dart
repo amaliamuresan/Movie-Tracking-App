@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:movie_app/models/actor.dart';
 import 'package:movie_app/models/serializers.dart';
 
 part 'movie.g.dart';
@@ -15,7 +16,7 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
   Movie._();
 
   @nullable
-  int get id;
+  String get id;
 
   @nullable
   String get title;
@@ -37,6 +38,21 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   @nullable
   String get poster_path;
+
+  @nullable
+  String get backdrop_path;
+
+  @nullable
+  String get overview;
+
+  @nullable
+  String get director;
+
+  @nullable
+  String get imdbRating;
+
+  @nullable
+  BuiltList<Actor> get actors;
 
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this) as Map<String, dynamic>;
   static Serializer<Movie> get serializer => _$movieSerializer;

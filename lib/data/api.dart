@@ -144,4 +144,36 @@ class AppApi {
       return new BuiltList([]);
     }
   }
+
+  Future<Movie> viewMovie(String id) async {
+    int i = int.parse(id);
+    final Uri url = Uri(
+        scheme: 'https',
+        host: '192.168.1.4',
+        port: 8080,
+        pathSegments: <String>[
+          'api',
+          'tmdb',
+          'get_movie'
+        ],
+        queryParameters: <String, String>{
+          'id': '$i',
+        });
+
+    final Response response = await _client.get(url);
+    final String body = response.body;
+    final dynamic movieJson = jsonDecode(body);
+    final Map<String, dynamic> json = jsonDecode(body);
+    //json.removeWhere((key, value) => (key == 'imbd_id'));
+
+    Movie movie = Movie.fromJson(movieJson);
+    print('Movie from API $movie');
+
+    if (movie != null) {
+      return movie;
+    }
+    else {
+      return new Movie();
+    }
+  }
 }

@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:movie_app/actions/get_movies.dart';
 import 'package:movie_app/actions/get_movies_by_name.dart';
 import 'package:movie_app/actions/index.dart';
+import 'package:movie_app/actions/view_movie.dart';
 import 'package:movie_app/data/api.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/states/app_state.dart';
@@ -20,6 +21,7 @@ class MoviesEpics {
     return combineEpics(<Epic<AppState>>[
       TypedEpic<AppState, GetMovies$>(_getMovies),
       TypedEpic<AppState, GetMoviesByName$>(_getMoviesByName),
+      TypedEpic<AppState, ViewMovie$>(_viewMovie),
     ]);
   }
 
@@ -39,5 +41,14 @@ class MoviesEpics {
             .asyncMap((GetMoviesByName$ action) => _api.getMoviesByName(action.movieName))
             .map((BuiltList<Movie> movies) => GetMoviesByName.successful(movies))
             .onErrorReturnWith((dynamic error) => GetMoviesByName.error(error)));
+  }
+
+  Stream<AppAction> _viewMovie(Stream<ViewMovie$> actions, EpicStore<AppState> store) {
+    return actions //
+        .flatMap((ViewMovie$ action)  =>
+        Stream<ViewMovie$>.value(action)
+            .asyncMap((ViewMovie$ action) async => await _api.viewMovie(action.movieId))
+            .map((Movie movie) => ViewMovie.successful(movie))
+            .onErrorReturnWith((dynamic error) => ViewMovie.error(error)));
   }
 }

@@ -34,6 +34,9 @@ abstract class MoviesState implements Built<MoviesState, MoviesStateBuilder> {
   @nullable
   int get page;
 
+  @nullable
+  Movie get movie;
+
   Map<String, dynamic> get json =>
       serializers.serializeWith(serializer, this) as Map<String, dynamic>;
 
