@@ -4,6 +4,8 @@
 <head></head>
 
 <body>
-	<h1>This is the body of the index view</h1>
+	<h1>Hello Bean</h1>
+	<br>
+	<h2>${helloBean.helloMessage}</h2>
 </body>
 </html>

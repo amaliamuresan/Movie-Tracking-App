@@ -8,21 +8,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Controller
 public class WebHome {
-    /*@ResponseBody
-    @RequestMapping("/")
-    public String hello()
-    {
-        return "Hello World!";
-    }*/
     @RequestMapping("/")
     public String index(Model model)
     {
         return "index";
-    }
-
-    @RequestMapping("/hello")
-    public String hello(Model model)
-    {
-        return "hello";
     }
 }

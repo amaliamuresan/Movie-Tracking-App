@@ -12,19 +12,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
-//@EnableWebMvc
-//@ComponentScan(basePackages = {"com.client.webClient.config","com.client.webClient.controllers"})
+@EnableWebMvc
 public class WebConfiguration implements WebMvcConfigurer {
-    /*@Override
-    public void addViewControllers(final ViewControllerRegistry registry)
-    {
-        registry.addViewController("/").setViewName("index");
-    }*/
-    /*@Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer)
-    {
-        configurer.enable("mvc");
-    }*/
     @Bean
     public ViewResolver viewResolver()
     {
