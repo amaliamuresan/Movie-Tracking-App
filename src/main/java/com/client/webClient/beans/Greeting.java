@@ -1,4 +1,4 @@
-package com.client.webClient.models;
+package com.client.webClient.beans;
 
 public class Greeting {
     private int id;

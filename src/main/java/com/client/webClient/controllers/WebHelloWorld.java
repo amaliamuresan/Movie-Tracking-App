@@ -1,6 +1,6 @@
 package com.client.webClient.controllers;
 
-import com.client.webClient.models.Greeting;
+import com.client.webClient.beans.Greeting;
 import com.client.webClient.beans.HelloBean;
 import com.client.webClient.services.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.security.cert.CertificateException;
 public class WebHelloWorld {
     @Autowired
     private HelloBean helloBean;
-    //@Autowired
+    @Autowired
     private Greeting greeting;
     @Autowired
     private GreetingService greetingService;
@@ -39,7 +39,6 @@ public class WebHelloWorld {
     }
     @RequestMapping("/greeting")
     public String greeting(Model model) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
-        Greeting greeting;
         greeting=greetingService.getFromServer();
         model.addAttribute("greeting",greeting);
         return "hello_greeting";
