@@ -278,5 +278,28 @@ public class UserController {
     }
 
 
+    @GetMapping("/users/search_users")
+    public Object searchUsers(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException, JsonProcessingException {
+        String uid;
+        String query;
+        String token;
+
+        uid = request.get("uid");
+        query = request.get("query");
+        token = request.get("token");
+
+        if(uid == null || query == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        String checkResponse = userService.checkLegitUser(uid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
+        }
+
+        return userService.searchUser(query);
+    }
+
+
 
 }

@@ -172,4 +172,19 @@ public class UserService {
         }
 
     }
+
+    public Object searchUser(String query) throws ExecutionException, InterruptedException {
+        List<MinimalUser> resultList = new ArrayList<>();
+        MinimalUser minimalUser;
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future =
+                dbFirestore.collection(COLLECTION_NAME).whereGreaterThanOrEqualTo("display_name", query).whereLessThanOrEqualTo("display_name", query + '\uf8ff').get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        User remoteUser = documents.get(0).toObject(User.class);
+        for(QueryDocumentSnapshot snapshot : documents) {
+            minimalUser = snapshot.toObject(MinimalUser.class);
+            resultList.add(minimalUser);
+        }
+        return resultList;
+    }
 }
