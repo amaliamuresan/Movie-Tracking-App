@@ -193,5 +193,5 @@ title={MovieTitle} (required)
 ```
 id={MovieId} (required) tmdb movie id
 ```
-3.Get genres list
+4.Get genres list
 - ```https://localhost:8080/api/tmdb/get_genres```<br/>
