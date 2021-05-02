@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.server.restservice.models.User;
 import com.server.restservice.operation.JsonOperation;
+import com.server.restservice.service.UserFollowService;
 import com.server.restservice.service.UserMovieService;
 import com.server.restservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,9 @@ public class UserController {
 
     @GetMapping("/users/{name}")
     public User getDetails(@PathVariable String name) throws ExecutionException, InterruptedException {
-        return userService.getUserDetails(name);
+        User user = userService.getUserDetails(name);
+        user.setPassword(null);
+        return user;
     }
 
     @PostMapping("/users/update")
@@ -194,6 +197,71 @@ public class UserController {
         }
 
         return userMovieService.removeMovie(uid,movie_id,"watched");
+    }
+
+
+    ///
+
+
+    @PostMapping("/users/follow_user")
+    public Object followUser(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException {
+        String loggedUid;
+        String followUid;
+        String token;
+
+        loggedUid = request.get("logged_uid");
+        followUid = request.get("follow_uid");
+        token = request.get("token");
+
+        if(loggedUid == null || followUid == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(loggedUid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        return UserFollowService.followUser(loggedUid, followUid);
+    }
+
+    @GetMapping("/users/get_followed_users")
+    public Object getFollowedUsers(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException, JsonProcessingException {
+        String uid;
+        String token;
+
+        uid = request.get("uid");
+        token = request.get("token");
+
+        if(uid == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(uid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        return UserFollowService.getFollowers(uid);
+    }
+
+    @PostMapping("/users/unfollow_user")
+    public Object unfollowUser(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException {
+        String loggedUid;
+        String unfollowUid;
+        String token;
+
+        loggedUid = request.get("logged_uid");
+        unfollowUid = request.get("unfollow_uid");
+        token = request.get("token");
+
+        if(loggedUid == null || unfollowUid == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(loggedUid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        return UserFollowService.unfollowUser(loggedUid, unfollowUid);
     }
 
 

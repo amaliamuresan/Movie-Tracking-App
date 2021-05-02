@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
 import com.server.restservice.data.ServerData;
+import com.server.restservice.models.MinimalUser;
 import com.server.restservice.operation.JsonOperation;
 import com.server.restservice.models.User;
 import io.grpc.Server;
@@ -25,17 +26,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class UserService {
     private static final String COLLECTION_NAME = "users";
-
-    public Boolean checkUniqueUsername(User user) throws ExecutionException, InterruptedException {
-        Firestore dbFirestore = FirestoreClient.getFirestore();
-        ApiFuture<QuerySnapshot> future =
-                dbFirestore.collection(COLLECTION_NAME).whereEqualTo("username", user.getUsername()).get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        System.out.println(user.getUsername());
-        System.out.println(documents.size());
-        return documents.isEmpty();
-
-    }
 
     public boolean checkLegitUser(User user, String token) {
         System.out.println(token);
@@ -89,15 +79,29 @@ public class UserService {
         return JsonOperation.createJson("Error", "Error while creating user");
     }
 
-    public User getUserDetails(String uid) throws ExecutionException, InterruptedException {
+    public static User getUserDetails(String uid) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference documentReference=dbFirestore.collection(COLLECTION_NAME).document(uid);
-        //DocumentReference documentReference=dbFirestore.collection(COLLECTION_NAME).document().;
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
         if(document.exists())
         {
             return document.toObject(User.class);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static MinimalUser getUserDetailsMinimal(String uid) throws ExecutionException, InterruptedException {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        DocumentReference documentReference=dbFirestore.collection(COLLECTION_NAME).document(uid);
+        ApiFuture<DocumentSnapshot> future = documentReference.get();
+        DocumentSnapshot document = future.get();
+        if(document.exists())
+        {
+            return document.toObject(MinimalUser.class);
         }
         else
         {
