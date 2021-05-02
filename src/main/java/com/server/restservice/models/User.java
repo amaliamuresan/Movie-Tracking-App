@@ -2,6 +2,8 @@ package com.server.restservice.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.List;
+
 public class User {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String name;
@@ -17,6 +19,12 @@ public class User {
     private String uid;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String token = null;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<String> to_watch_movies;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<String> watched_movies;
+
+
 
     public void setToken(String token) {
         this.token = token;
@@ -68,5 +76,21 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<String> getTo_watch_movies() {
+        return to_watch_movies;
+    }
+
+    public void setTo_watch_movies(List<String> to_watch_movies) {
+        this.to_watch_movies = to_watch_movies;
+    }
+
+    public List<String> getWatched_movies() {
+        return watched_movies;
+    }
+
+    public void setWatched_movies(List<String> watched_movies) {
+        this.watched_movies = watched_movies;
     }
 }

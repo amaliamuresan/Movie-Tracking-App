@@ -49,6 +49,19 @@ public class UserService {
         }
     }
 
+    public boolean checkLegitUser(String uid, String token) {
+        System.out.println(token);
+        System.out.println("This is the uid " + uid);
+        if(token == null)
+            return false;
+        if(uid == null)
+            return false;
+        else {
+            String serverToken = ServerData.getToken(uid);
+            return serverToken != null && serverToken.equals(token);
+        }
+    }
+
     public Object saveUser(User user) {
         // Firebase Auth variables
         UserRecord userRecord = null;

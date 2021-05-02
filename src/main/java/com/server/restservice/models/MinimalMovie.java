@@ -1,20 +1,16 @@
 package com.server.restservice.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.server.restservice.data.ServerData;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SearchMovie {
+public class MinimalMovie {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String poster_path;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -23,7 +19,6 @@ public class SearchMovie {
     private String title;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> genres = new ArrayList<>();
-    //private Map<String,String> genres = new HashMap<String,String>();
 
 
 
@@ -58,16 +53,13 @@ public class SearchMovie {
         return genres;
     }
 
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
-    }
 
-    @JsonProperty("genre_ids")
+    @JsonProperty("genres")
     private void unpackNested(JsonNode nodeArr) {
         //genres = nodeArr;
         if(nodeArr.isArray()) {
             for(JsonNode node : nodeArr) {
-                genres.add(ServerData.getTmdbGenres().get(node.toString()));
+                genres.add(ServerData.getTmdbGenres().get(node.get("id").toString()));
             }
         }
     }

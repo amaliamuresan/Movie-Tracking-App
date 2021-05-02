@@ -5,11 +5,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.restservice.data.ServerData;
-import com.server.restservice.models.CastMember;
-import com.server.restservice.models.Movie;
-import com.server.restservice.models.SearchMovie;
-import com.server.restservice.models.TmdbGenre;
+import com.server.restservice.models.*;
 import javafx.util.Pair;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -181,6 +180,25 @@ public class TMDBService {
         movie.settDirector(extraDetails.get("director"));
         return movie;
     }
+
+    public static MinimalMovie getMovieDetailsMinimal(String movieId) throws JsonProcessingException {
+        String apiUrl = ServerData.getTmdbApiUrl();
+        String apiKey = ServerData.getTmdbApiKey();
+        String jsonBody;
+        String url = apiUrl + "movie/" + movieId + "?api_key=" + apiKey;
+
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            jsonBody = restTemplate.getForObject(url, String.class);
+        } catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc) {
+            return null;
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        MinimalMovie movie = mapper.readValue(jsonBody, MinimalMovie.class);
+        return movie;
+    }
+
 }
 
 
