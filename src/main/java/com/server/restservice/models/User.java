@@ -23,6 +23,8 @@ public class User {
     private List<String> to_watch_movies;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> watched_movies;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String display_name;
 
 
 
@@ -93,5 +95,13 @@ public class User {
 
     public void setWatched_movies(List<String> watched_movies) {
         this.watched_movies = watched_movies;
+    }
+
+    public String getDisplay_name() {
+        return display_name;
+    }
+
+    public void setDisplay_name(String display_name) {
+        this.display_name = display_name;
     }
 }

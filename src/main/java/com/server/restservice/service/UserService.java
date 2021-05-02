@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -104,26 +105,11 @@ public class UserService {
         }
     }
 
-    public Object updateUser(User user, String token) throws ExecutionException, InterruptedException {
-        String jsonBody;
-        JsonNode node;
-        if(!checkLegitUser(user, token)) {
-            return JsonOperation.createJson("Error", "Invalid user id or user token");
-        }
-        /* NON NULLABLE FIELDS!
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        try {
-            jsonBody = mapper.writeValueAsString(user);
-            node = mapper.readTree(jsonBody);
+    public Object updateUser(String uid, Map<String,Object> data) throws ExecutionException, InterruptedException {
 
-        } catch (JsonProcessingException e) {
-            return JsonOperation.createJson("Error", "Invalid user structure");
-        }*/
 
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        //ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getName()).set(user);
-        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(user.getUid()).set(user);
+        dbFirestore.collection(COLLECTION_NAME).document(uid).update(data);
 
         return JsonOperation.createJson("Success","Account updated successfully");
     }

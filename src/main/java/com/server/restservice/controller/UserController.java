@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -37,9 +38,36 @@ public class UserController {
         return userService.getUserDetails(name);
     }
 
-    @PutMapping("/users/update/{token}")
-    public Object update(@PathVariable String token, @RequestBody User user) throws ExecutionException, InterruptedException {
-        return userService.updateUser(user,token);
+    @PostMapping("/users/update")
+    public Object update(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException {
+        String uid;
+        String password;
+        String displayName;
+        String token;
+        Map<String,Object> newData = new HashMap<>();
+
+        uid = request.get("uid");
+        token = request.get("token");
+        password = request.get("password");
+        displayName = request.get("display_name");
+
+        if((password == null && displayName == null) || uid == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(uid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        if(password != null){
+            newData.put("password",password);
+        }
+
+        if(displayName != null) {
+            newData.put("display_name", displayName);
+        }
+
+        return userService.updateUser(uid, newData);
     }
 
     @PostMapping("/users/add_to_watch_movie")
