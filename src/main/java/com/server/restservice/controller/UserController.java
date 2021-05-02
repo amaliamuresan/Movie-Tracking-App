@@ -80,7 +80,94 @@ public class UserController {
         if(!userService.checkLegitUser(loggedUid,token)) {
             return JsonOperation.createJson("Error", "Invalid token");
         }
-        System.out.println(userMovieService.getToWatchMovies(userUid));
         return userMovieService.getToWatchMovies(userUid);
     }
+
+    @PostMapping("/users/remove_to_watch_movie")
+    public Object removeToWatchMovie(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException {
+        String uid;
+        String movie_id;
+        String token;
+
+        uid = request.get("uid");
+        movie_id = request.get("movie_id");
+        token = request.get("token");
+
+        if(uid == null || movie_id == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(uid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        return userMovieService.removeMovie(uid,movie_id,"to_watch");
+    }
+
+
+    @PostMapping("/users/add_watched_movie")
+    public Object addWatchedMovie(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException {
+        String uid;
+        String movie_id;
+        String token;
+
+        uid = request.get("uid");
+        movie_id = request.get("movie_id");
+        token = request.get("token");
+
+        if(uid == null || movie_id == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(uid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        return userMovieService.addWatchedMovie(uid,movie_id);
+    }
+
+    @GetMapping("/users/get_watched_movie")
+    public Object getWatchedMovie(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException, JsonProcessingException {
+        String loggedUid;
+        String userUid;
+        String token;
+
+        loggedUid = request.get("logged_uid");
+        userUid = request.get("user_uid");
+        token = request.get("token");
+
+        if(loggedUid == null || userUid == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(loggedUid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        return userMovieService.getWatchedMovie(userUid);
+    }
+
+    @PostMapping("/users/remove_watched_movie")
+    public Object removeWatchedMovie(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException {
+        String uid;
+        String movie_id;
+        String token;
+
+        uid = request.get("uid");
+        movie_id = request.get("movie_id");
+        token = request.get("token");
+
+        if(uid == null || movie_id == null || token == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
+
+        if(!userService.checkLegitUser(uid,token)) {
+            return JsonOperation.createJson("Error", "Invalid token");
+        }
+
+        return userMovieService.removeMovie(uid,movie_id,"watched");
+    }
+
+
+
 }
