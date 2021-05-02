@@ -26,6 +26,9 @@ public class UserController {
 
     @PostMapping("/users/register")
     public Object saveUser(@RequestBody User user) {
+        if(user.getEmail() == null || user.getPassword() == null || user.getDisplay_name() == null) {
+            return JsonOperation.createJson("Error", "Invalid request parameters");
+        }
         return userService.saveUser(user);
     }
 
@@ -58,8 +61,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(uid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(uid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         if(password != null){
@@ -87,8 +91,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(uid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(uid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return userMovieService.addToWatchMovie(uid,movie_id);
@@ -108,8 +113,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(loggedUid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(loggedUid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
         return userMovieService.getToWatchMovies(userUid);
     }
@@ -128,8 +134,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(uid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(uid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return userMovieService.removeMovie(uid,movie_id,"to_watch");
@@ -150,8 +157,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(uid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(uid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return userMovieService.addWatchedMovie(uid,movie_id);
@@ -171,8 +179,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(loggedUid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(loggedUid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return userMovieService.getWatchedMovie(userUid);
@@ -192,8 +201,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(uid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(uid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return userMovieService.removeMovie(uid,movie_id,"watched");
@@ -217,8 +227,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(loggedUid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(loggedUid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return UserFollowService.followUser(loggedUid, followUid);
@@ -236,8 +247,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(uid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(uid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return UserFollowService.getFollowers(uid);
@@ -257,8 +269,9 @@ public class UserController {
             return JsonOperation.createJson("Error", "Invalid request parameters");
         }
 
-        if(!userService.checkLegitUser(loggedUid,token)) {
-            return JsonOperation.createJson("Error", "Invalid token");
+        String checkResponse = userService.checkLegitUser(loggedUid,token);
+        if(!checkResponse.equals("Success")) {
+            return JsonOperation.createJson("Error", checkResponse);
         }
 
         return UserFollowService.unfollowUser(loggedUid, unfollowUid);

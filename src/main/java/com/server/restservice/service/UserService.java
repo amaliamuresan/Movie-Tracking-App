@@ -18,6 +18,7 @@ import com.server.restservice.models.User;
 import io.grpc.Server;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -40,16 +41,24 @@ public class UserService {
         }
     }
 
-    public boolean checkLegitUser(String uid, String token) {
+    public String checkLegitUser(String uid, String token) {
         System.out.println(token);
         System.out.println("This is the uid " + uid);
         if(token == null)
-            return false;
+            return "Missing token";
         if(uid == null)
-            return false;
+            return "Missing uid";
         else {
             String serverToken = ServerData.getToken(uid);
-            return serverToken != null && serverToken.equals(token);
+            if(ServerData.isBlocked(uid)) {
+                return "Account is temporarily blocked";
+            }
+            if(serverToken != null && serverToken.equals(token)) {
+                    return  "Success";
+            } else {
+                ServerData.addStrike(uid);
+                return "Invalid Token";
+            }
         }
     }
 
@@ -70,8 +79,13 @@ public class UserService {
         if(userRecord != null)
         {
             String uid = userRecord.getUid();
+            List<String> emptyList = new ArrayList<>();
             Firestore dbFirestore = FirestoreClient.getFirestore();
             user.setUid(uid);
+            user.setFollowed_users(emptyList);
+            user.setTo_watch_movies(emptyList);
+            user.setWatched_movies(emptyList);
+
             ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(uid).set(user);
             return JsonOperation.createJson("uid",uid);
         }
@@ -126,6 +140,9 @@ public class UserService {
         User remoteUser = documents.get(0).toObject(User.class);
         System.out.println("USERNAME + " + remoteUser.getEmail());
         String token = null;
+        if(ServerData.isBlocked(remoteUser.getUid())) {
+            return JsonOperation.createJson("Error", "Account blocked temporarily.");
+        }
         if(remoteUser.getEmail().equals(user.getEmail()) && remoteUser.getPassword().equals(user.getPassword()))
         {
             String uid = remoteUser.getUid();
@@ -133,6 +150,8 @@ public class UserService {
             {
                 ServerData.removeToken(uid);
             }
+            ServerData.resetStrikes(uid);
+
             token = FirebaseAuth.getInstance().createCustomToken(remoteUser.getUid());
             ServerData.addToken(remoteUser.getUid(),token);
             System.out.println(token);
@@ -148,6 +167,7 @@ public class UserService {
             //return remoteUser;
         }
         else{
+            ServerData.addStrike(remoteUser.getUid());
             return JsonOperation.createJson("Error", "Invalid credentials");
         }
 

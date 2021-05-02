@@ -2,12 +2,17 @@ package com.server.restservice.data;
 
 import com.server.restservice.models.User;
 
+import javax.jws.soap.SOAPBinding;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
 public class ServerData {
     private static Hashtable<String, String> UserTokens = new Hashtable<>();
+    private static Hashtable<String, Integer> UserStrikes = new Hashtable<>();
+    private static Hashtable<String, Instant> UserStrikeTime = new Hashtable<>();
     private static final String tmdbApiKey = "beded07fb1fd90eef57842dca26e86c0";
     private static final String tmdbApiUrl = "https://api.themoviedb.org/3/";
     private static final String tmdbImageUrl = "https://image.tmdb.org/t/p/w500";
@@ -58,4 +63,40 @@ public class ServerData {
     public static String getOmdbApiKey() {
         return omdbApiKey;
     }
+
+    public static void addStrike(String uid) {
+        Integer noStrike = UserStrikes.get(uid);
+        if(noStrike != null) {
+            noStrike += 1;
+        }
+        else {
+            noStrike = 1;
+        }
+        if(noStrike >= 3) {
+            UserStrikeTime.put(uid,Instant.now());
+        }
+        UserStrikes.put(uid,noStrike);
+    }
+
+    public static boolean isBlocked(String uid) {
+        Integer noStrike = UserStrikes.get(uid);
+        if(noStrike != null && noStrike >= 3) {
+            Duration timeElapsed = Duration.between(UserStrikeTime.get(uid),Instant.now());
+            if(timeElapsed.toMillis() > 5000) {
+                resetStrikes(uid);
+                return false;
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public static void resetStrikes(String uid) {
+        if(UserStrikes.get(uid) != null) {
+            UserStrikes.remove(uid);
+        }
+    }
+
 }
