@@ -99,7 +99,7 @@ public class UserController {
         return userMovieService.addToWatchMovie(uid,movie_id);
     }
 
-    @GetMapping("/users/get_to_watch_movie")
+    @PostMapping("/users/get_to_watch_movie")
     public Object getToWatchMovie(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException, JsonProcessingException {
         String loggedUid;
         String userUid;
@@ -165,7 +165,7 @@ public class UserController {
         return userMovieService.addWatchedMovie(uid,movie_id);
     }
 
-    @GetMapping("/users/get_watched_movie")
+    @PostMapping("/users/get_watched_movie")
     public Object getWatchedMovie(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException, JsonProcessingException {
         String loggedUid;
         String userUid;
