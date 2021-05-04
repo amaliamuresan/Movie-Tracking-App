@@ -28,10 +28,12 @@ abstract class AppUser implements Built<AppUser, AppUserBuilder>{
   String get password;
 
   @nullable
+  @BuiltValueField(wireName: 'display_name')
   String get displayName;
 
   @nullable
-  List<String> get friends;
+  @BuiltValueField(wireName: 'followed_users')
+  BuiltList<String> get friends;
 
   @nullable
   @BuiltValueField(wireName: 'to_watch_movies')

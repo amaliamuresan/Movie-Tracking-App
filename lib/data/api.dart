@@ -281,4 +281,31 @@ class AppApi {
     print('To watch movie list $ret');
     return ret;
   }
+
+  Future<List<AppUser>> getFollowing({@required AppUser user}) async {
+    Uri url;
+    Response response;
+
+    List<AppUser> ret = [];
+    for (int i = 0; i < user.friends.length; i += 1) {
+      url = Uri(scheme: 'https', host: ipAddress, port: 8080, pathSegments: <String>[
+        'api',
+        'users',
+        user.friends[i],
+      ]);
+
+      response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },);
+      print('\n\n\n');
+      print(response.body);
+
+      ret.add(AppUser.fromJson(jsonDecode(response.body)));
+    }
+
+    print('List useri ret $ret');
+    return ret;
+  }
 }
