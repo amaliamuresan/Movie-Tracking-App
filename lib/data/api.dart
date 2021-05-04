@@ -308,4 +308,63 @@ class AppApi {
     print('List useri ret $ret');
     return ret;
   }
+
+  Future<List<AppUser>> searchUsers(String query, AppUser user) async {
+    final Uri url = Uri(scheme: 'https', host: ipAddress, port: 8080, pathSegments: <String>[
+      'api',
+      'users',
+      'search_users'
+    ]);
+
+    Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'uid': user.uid,
+          'query': query,
+          'token': user.token,
+        }), );
+
+    final String body = response.body;
+    final List<dynamic> list = jsonDecode(body);
+
+    List<AppUser> ret = [];
+    for (int i = 0; i < list.length; i += 1) {
+      ret.add(AppUser.fromJson(list[i]));
+    }
+    return ret;
+  }
+
+  Future<String> followUser({String uid, AppUser user}) async {
+    Uri url;
+    Response response;
+
+    if (!user.friends.contains(uid)) {
+      url = Uri(scheme: 'https', host: ipAddress, port: 8080, pathSegments: <String>[
+        'api',
+        'users',
+        'follow_user',
+      ]);
+    } else {
+      url = Uri(scheme: 'https', host: ipAddress, port: 8080, pathSegments: <String>[
+        'api',
+        'users',
+        'unfollow_user',
+      ]);
+    }
+    response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'logged_uid': user.uid,
+        'uid': uid,
+        'token': user.token,
+      }),
+    );
+    return uid;
+  }
 }

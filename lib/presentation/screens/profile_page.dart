@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:movie_app/actions/follow_user.dart';
+import 'package:movie_app/containers/user_container.dart';
 import 'package:movie_app/data/api.dart';
 import 'package:movie_app/models/app_user.dart';
 import 'package:movie_app/models/movie.dart';
@@ -49,26 +51,55 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     return Scaffold(
       appBar: AppBar(
         title: (widget.user.uid == widget.loggedUser.uid) ? Text('Profile') : Text(widget.user.displayName),
-        //leading: (widget.user.uid == widget.loggedUser.uid) ? Icon(Icons.settings) : Text(''),
         backgroundColor: Color.fromRGBO(29, 52, 97, 1),
         actions: <Widget>[
-          (widget.user.uid == widget.loggedUser.uid) ? IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          ) : Text('')
+          (widget.user.uid == widget.loggedUser.uid)
+              ? IconButton(
+                  icon: Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                )
+              : UserContainer(builder: (BuildContext context, AppUser user) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        StoreProvider.of<AppState>(context).dispatch(FollowUser(widget.user.uid, user));
+                      },
+                      child: Chip(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white70, width: 1),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        labelPadding: EdgeInsets.all(2.0),
+                        label: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: UserContainer(
+                            builder: (BuildContext context, AppUser user) {
+                              return Text(
+                                (user.friends.contains(widget.user.uid) ? 'Following' : 'Follow'),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        backgroundColor: Color.fromRGBO(29, 52, 97, 1),
+                      ),
+                    ),
+                  );
+                }),
         ],
       ),
       bottomNavigationBar: DefaultTabController(
         length: 2,
         child: Container(
           color: Color.fromRGBO(29, 52, 97, 1),
-          child: TabBar(
-              controller: _controller,
-              indicatorColor: Color.fromRGBO(238, 108, 77, 1),
-              tabs: [
+          child: TabBar(controller: _controller, indicatorColor: Color.fromRGBO(238, 108, 77, 1), tabs: [
             GestureDetector(
               onTap: () async {},
               child: Tab(

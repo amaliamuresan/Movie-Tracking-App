@@ -12,45 +12,46 @@ class UserCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
-        children: <Widget>[
-          SizedBox(width: 4),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2.0),
-            child: Text(
-                user.displayName,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: Color.fromRGBO(29, 52, 97, 1),
-                ),
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                user: user,
+                loggedUser: StoreProvider.of<AppState>(context).state.authState.user,
+              ),
             ),
-          ),
-          SizedBox(width: 4,),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              '(${user.email})',
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.black87
-            ),),
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(
-                      user: user,
-                      loggedUser: StoreProvider.of<AppState>(context).state.authState.user,
-                    ),
+          );
+        },
+        child: Row(
+          children: <Widget>[
+            SizedBox(width: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2.0),
+              child: Text(
+                  user.displayName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: Color.fromRGBO(29, 52, 97, 1),
                   ),
-                );
-              },
+              ),
+            ),
+            SizedBox(width: 4,),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                '(${user.email})',
+                  overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black87
+              ),),
+            ),
+            /*Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Chip(
                 shape: RoundedRectangleBorder(
                   side: BorderSide(
@@ -75,9 +76,9 @@ class UserCard extends StatelessWidget {
                 ),
                 backgroundColor: Colors.white,
               ),
-            ),
-          ),
-        ],
+            ),*/
+          ],
+        ),
       ),
     );
   }

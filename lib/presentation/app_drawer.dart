@@ -66,7 +66,9 @@ class AppDrawer extends StatelessWidget {
               color: Color.fromRGBO(238, 108, 77, 1),
             ),
             title: Text('Search users'),
-            onTap: () async => {},
+            onTap: () => {
+              Navigator.pushNamed(context, AppRoutes.search_user)
+            },
           ),
           ListTile(
             leading: Icon(

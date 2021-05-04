@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:movie_app/actions/follow_user.dart';
 import 'package:movie_app/actions/index.dart';
 import 'package:movie_app/actions/login.dart';
 import 'package:movie_app/actions/register.dart';
@@ -19,6 +20,7 @@ class AuthEpics {
     return combineEpics(<Epic<AppState>>[
       TypedEpic<AppState, Login$>(_login),
       TypedEpic<AppState, Register$>(_register),
+      TypedEpic<AppState, FollowUser$>(_followUser),
     ]);
   }
 
@@ -49,5 +51,14 @@ class AuthEpics {
                 ])
             .onErrorReturnWith((dynamic error) => Register.error(error))
             .doOnData(action.response));
+  }
+
+  Stream<AppAction> _followUser(Stream<FollowUser$> actions, EpicStore<AppState> store) {
+    return actions //
+        .flatMap((FollowUser$ action)  =>
+        Stream<FollowUser$>.value(action)
+            .asyncMap((FollowUser$ action) async => await _api.followUser(user: action.user, uid: action.userToFollowId))
+            .map((String movieId) => FollowUser.successful(movieId))
+            .onErrorReturnWith((dynamic error) => FollowUser.error(error)));
   }
 }
