@@ -1,8 +1,10 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:meta/meta.dart';
+import 'package:movie_app/actions/add_watched.dart';
 import 'package:movie_app/actions/get_movies.dart';
 import 'package:movie_app/actions/get_movies_by_name.dart';
 import 'package:movie_app/actions/index.dart';
+import 'package:movie_app/actions/to_watch.dart';
 import 'package:movie_app/actions/view_movie.dart';
 import 'package:movie_app/data/api.dart';
 import 'package:movie_app/models/movie.dart';
@@ -22,6 +24,8 @@ class MoviesEpics {
       TypedEpic<AppState, GetMovies$>(_getMovies),
       TypedEpic<AppState, GetMoviesByName$>(_getMoviesByName),
       TypedEpic<AppState, ViewMovie$>(_viewMovie),
+      TypedEpic<AppState, ToWatch$>(_toWatch),
+      TypedEpic<AppState, AddWatched$>(_addWatched),
     ]);
   }
 
@@ -50,5 +54,23 @@ class MoviesEpics {
             .asyncMap((ViewMovie$ action) async => await _api.viewMovie(action.movieId))
             .map((Movie movie) => ViewMovie.successful(movie))
             .onErrorReturnWith((dynamic error) => ViewMovie.error(error)));
+  }
+
+  Stream<AppAction> _toWatch(Stream<ToWatch$> actions, EpicStore<AppState> store) {
+    return actions //
+        .flatMap((ToWatch$ action)  =>
+        Stream<ToWatch$>.value(action)
+            .asyncMap((ToWatch$ action) async => await _api.addToWatch(user: action.user, movieId: action.movieId))
+            .map((String movieId) => ToWatch.successful(movieId))
+            .onErrorReturnWith((dynamic error) => ToWatch.error(error)));
+  }
+
+  Stream<AppAction> _addWatched(Stream<AddWatched$> actions, EpicStore<AppState> store) {
+    return actions //
+        .flatMap((AddWatched$ action)  =>
+        Stream<AddWatched$>.value(action)
+            .asyncMap((AddWatched$ action) async => await _api.addWatched(user: action.user, movieId: action.movieId))
+            .map((String movieId) => AddWatched.successful(movieId))
+            .onErrorReturnWith((dynamic error) => AddWatched.error(error)));
   }
 }

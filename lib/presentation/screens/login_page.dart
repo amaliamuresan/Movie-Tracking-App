@@ -7,6 +7,8 @@ import 'package:movie_app/models/states/app_state.dart';
 import 'package:movie_app/routes/routes.dart';
 import 'package:toast/toast.dart';
 
+import 'profile_page.dart';
+
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -175,7 +177,6 @@ class LoginPage extends StatelessWidget {
   }
 
   void _onResponse(BuildContext context, AppAction action) {
-    print("On response");
     if (action is LoginSuccessful) {
       Navigator.pushNamed(context, AppRoutes.home);
       print('Login successs!!!!');

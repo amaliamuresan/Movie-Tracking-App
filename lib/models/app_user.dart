@@ -31,7 +31,15 @@ abstract class AppUser implements Built<AppUser, AppUserBuilder>{
   String get displayName;
 
   @nullable
-  List<AppUser> get friends;
+  List<String> get friends;
+
+  @nullable
+  @BuiltValueField(wireName: 'to_watch_movies')
+  BuiltList<String> get toWatchMovies;
+
+  @nullable
+  @BuiltValueField(wireName: 'watched_movies')
+  BuiltList<String> get watchedMovies;
 
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this) as Map<String, dynamic>;
   static Serializer<AppUser> get serializer => _$appUserSerializer;

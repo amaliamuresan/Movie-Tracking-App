@@ -4,12 +4,13 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:movie_app/actions/get_movies.dart';
 import 'package:movie_app/actions/get_movies_by_name.dart';
 import 'package:movie_app/actions/update_genre.dart';
-import 'package:movie_app/actions/view_movie.dart';
 import 'package:movie_app/containers/genre_container.dart';
 import 'package:movie_app/containers/movies_container.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/states/app_state.dart';
-import 'package:movie_app/routes/routes.dart';
+import 'package:movie_app/presentation/movies_gridview.dart';
+
+import '../app_drawer.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
@@ -38,6 +39,7 @@ class HomePage extends StatelessWidget {
     ];
 
     return Scaffold(
+      drawer: AppDrawer(),
       appBar: AppBar(
         title: TextFormField(
           validator: (val) => val.isEmpty ? 'Enter a valid name' : null,
@@ -103,7 +105,7 @@ class HomePage extends StatelessWidget {
                         },
                       ),
                       SizedBox(height: 16),
-                      GridView.builder(
+                      /*GridView.builder(
                         itemCount: movies.length,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -128,7 +130,8 @@ class HomePage extends StatelessWidget {
                             ),
                           );
                         },
-                      ),
+                      ),*/
+                      MoviesGridView(movies: movies.toList()),
                       pageState(
                           StoreProvider.of<AppState>(context)
                               .state
