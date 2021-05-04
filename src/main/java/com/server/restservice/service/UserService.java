@@ -157,14 +157,16 @@ public class UserService {
             System.out.println(token);
 
 
-            Hashtable<String, String> returnData = new Hashtable<>();
+//            Hashtable<String, String> returnData = new Hashtable<>();
+//
+//            returnData.put("token",token);
+//            returnData.put("uid", remoteUser.getUid());
 
-           returnData.put("token",token);
-            returnData.put("uid", remoteUser.getUid());
 
-            return JsonOperation.createJson(returnData);
-            //remoteUser.setToken(token);
-            //return remoteUser;
+            //return JsonOperation.createJson(returnData);
+            remoteUser.setToken(token);
+            remoteUser.setPassword(null);
+            return remoteUser;
         }
         else{
             ServerData.addStrike(remoteUser.getUid());
