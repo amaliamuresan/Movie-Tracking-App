@@ -220,7 +220,7 @@ public class UserController {
         String token;
 
         loggedUid = request.get("logged_uid");
-        followUid = request.get("follow_uid");
+        followUid = request.get("uid");
         token = request.get("token");
 
         if(loggedUid == null || followUid == null || token == null) {
@@ -262,7 +262,7 @@ public class UserController {
         String token;
 
         loggedUid = request.get("logged_uid");
-        unfollowUid = request.get("unfollow_uid");
+        unfollowUid = request.get("uid");
         token = request.get("token");
 
         if(loggedUid == null || unfollowUid == null || token == null) {
@@ -278,7 +278,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/users/search_users")
+    @PostMapping("/users/search_users")
     public Object searchUsers(@RequestBody Map<String,String> request) throws ExecutionException, InterruptedException, JsonProcessingException {
         String uid;
         String query;
