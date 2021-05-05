@@ -31,19 +31,4 @@ public class GreetingService {
         return greeting;
     }
 
-    public SSLUsingRestTemplateConfigurator getSslUsingRestTemplateConfigurator() {
-        return sslUsingRestTemplateConfigurator;
-    }
-
-    public void setSslUsingRestTemplateConfigurator(SSLUsingRestTemplateConfigurator sslUsingRestTemplateConfigurator) {
-        this.sslUsingRestTemplateConfigurator = sslUsingRestTemplateConfigurator;
-    }
-
-    public Greeting getGreeting() {
-        return greeting;
-    }
-
-    public void setGreeting(Greeting greeting) {
-        this.greeting = greeting;
-    }
 }

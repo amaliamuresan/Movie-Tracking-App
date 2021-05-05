@@ -43,28 +43,4 @@ public class WebHelloWorld {
         model.addAttribute("greeting",greeting);
         return "hello_greeting";
     }
-
-    public HelloBean getHelloBean() {
-        return helloBean;
-    }
-
-    public void setHelloBean(HelloBean helloBean) {
-        this.helloBean = helloBean;
-    }
-
-    public Greeting getGreeting() {
-        return greeting;
-    }
-
-    public void setGreeting(Greeting greeting) {
-        this.greeting = greeting;
-    }
-
-    public GreetingService getGreetingService() {
-        return greetingService;
-    }
-
-    public void setGreetingService(GreetingService greetingService) {
-        this.greetingService = greetingService;
-    }
 }

@@ -30,7 +30,4 @@ public class SSLUsingRestTemplateConfigurator {
         return factory;
     }
 
-    public void setFactory(HttpComponentsClientHttpRequestFactory factory) {
-        this.factory = factory;
-    }
 }

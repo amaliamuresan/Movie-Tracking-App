@@ -41,19 +41,5 @@ public class WebMovie {
         return "hello_movies";
     }
 
-    public DiscoverMovie getDiscoverMovie() {
-        return discoverMovie;
-    }
 
-    public void setDiscoverMovie(DiscoverMovie discoverMovie) {
-        this.discoverMovie = discoverMovie;
-    }
-
-    public String getServerURL() {
-        return serverURL;
-    }
-
-    public void setServerURL(String serverURL) {
-        this.serverURL = serverURL;
-    }
 }

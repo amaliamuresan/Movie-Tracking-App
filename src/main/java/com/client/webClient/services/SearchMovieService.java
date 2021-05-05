@@ -32,19 +32,4 @@ public class SearchMovieService {
         return discoverMovies;
     }
 
-    public SSLUsingRestTemplateConfigurator getSslUsingRestTemplateConfigurator() {
-        return sslUsingRestTemplateConfigurator;
-    }
-
-    public void setSslUsingRestTemplateConfigurator(SSLUsingRestTemplateConfigurator sslUsingRestTemplateConfigurator) {
-        this.sslUsingRestTemplateConfigurator = sslUsingRestTemplateConfigurator;
-    }
-
-    public DiscoverMovie[] getDiscoverMovies() {
-        return discoverMovies;
-    }
-
-    public void setDiscoverMovies(DiscoverMovie[] discoverMovies) {
-        this.discoverMovies = discoverMovies;
-    }
 }
