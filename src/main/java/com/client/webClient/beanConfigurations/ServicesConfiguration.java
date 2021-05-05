@@ -1,8 +1,9 @@
 package com.client.webClient.beanConfigurations;
 
+import com.client.webClient.services.SearchMovieService;
+import com.client.webClient.services.DiscoverMoviesService;
 import com.client.webClient.services.GreetingService;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,16 @@ public class ServicesConfiguration {
     @Bean
     public GreetingService greetingService() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         return new GreetingService(ourServerUrl);
+    }
+    @Bean
+    public DiscoverMoviesService discoverMoviesService()
+    {
+        return new DiscoverMoviesService(ourServerUrl);
+    }
+    @Bean
+    public SearchMovieService searchMovieService()
+    {
+        return new SearchMovieService(ourServerUrl);
     }
     @PostConstruct
     public void afterInit() throws IOException {
