@@ -26,6 +26,10 @@ public class SearchMovieService {
 
     public DiscoverMovie[] getFromServer(String title) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         String processedURL=serverURL;
+        if(title==null || title.equals(""))
+        {
+            title="g";
+        }
         processedURL+="/api/tmdb/search_movie?title="+title;
         RestTemplate restT=new SSLUsingRestTemplate(sslUsingRestTemplateConfigurator);
         discoverMovies=restT.getForObject(processedURL,DiscoverMovie[].class);
