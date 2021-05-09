@@ -12,6 +12,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Map;
 
 public class DiscoverMoviesService {
     private String serverURL;
@@ -27,6 +28,21 @@ public class DiscoverMoviesService {
     public DiscoverMovie[] getFromServer() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         String processedURL=serverURL;
         processedURL+="/api/tmdb/discover_movie?type=popularity";
+        RestTemplate restT=new SSLUsingRestTemplate(sslUsingRestTemplateConfigurator);
+        discoverMovies=restT.getForObject(processedURL,DiscoverMovie[].class);
+        return discoverMovies;
+    }
+    public DiscoverMovie[] getFromServer(Map<String,String> params) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
+        String processedURL=serverURL;
+        processedURL+="/api/tmdb/discover_movie?type=popularity";
+        if(params.containsKey("genre"))
+        {
+            processedURL+="&genre="+params.get("genre");
+        }
+        if(params.containsKey("page"))
+        {
+            processedURL+="&page="+params.get("page");
+        }
         RestTemplate restT=new SSLUsingRestTemplate(sslUsingRestTemplateConfigurator);
         discoverMovies=restT.getForObject(processedURL,DiscoverMovie[].class);
         return discoverMovies;

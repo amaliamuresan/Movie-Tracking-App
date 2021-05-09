@@ -67,7 +67,7 @@ public class WebMovie {
     }
     @RequestMapping("/genres")
     @ResponseBody
-    public Map<String,String> genres() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public Map<String,String> genres(Model model) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         genres=genresService.getFromServer();
         return genres;
     }
