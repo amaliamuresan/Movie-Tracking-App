@@ -1,8 +1,6 @@
 package com.client.webClient.beanConfigurations;
 
-import com.client.webClient.services.SearchMovieService;
-import com.client.webClient.services.DiscoverMoviesService;
-import com.client.webClient.services.GreetingService;
+import com.client.webClient.services.*;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +41,16 @@ public class ServicesConfiguration {
     public SearchMovieService searchMovieService()
     {
         return new SearchMovieService(ourServerUrl);
+    }
+    @Bean
+    public FullMovieService fullMovieService()
+    {
+        return new FullMovieService(ourServerUrl);
+    }
+    @Bean
+    public GenresService genresService()
+    {
+        return new GenresService(ourServerUrl);
     }
     @PostConstruct
     public void afterInit() throws IOException {
