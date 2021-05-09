@@ -11,4 +11,9 @@ public class UserConfiguration {
     {
         return new User();
     }
+    @Bean
+    public User otherUser()
+    {
+        return new User();
+    }
 }

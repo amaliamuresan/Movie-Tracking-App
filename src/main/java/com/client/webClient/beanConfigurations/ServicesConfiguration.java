@@ -2,6 +2,8 @@ package com.client.webClient.beanConfigurations;
 
 import com.client.webClient.services.movies.*;
 import com.client.webClient.services.user.LoginService;
+import com.client.webClient.services.user.OtherUserService;
+import com.client.webClient.services.user.RegisterService;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -58,6 +60,16 @@ public class ServicesConfiguration {
     public LoginService loginService()
     {
         return new LoginService();
+    }
+    @Bean
+    public OtherUserService otherUserService()
+    {
+        return new OtherUserService();
+    }
+    @Bean
+    public RegisterService registerService()
+    {
+        return new RegisterService();
     }
     @PostConstruct
     public void afterInit() throws IOException {
