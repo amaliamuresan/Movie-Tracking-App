@@ -1,7 +1,7 @@
-package com.client.webClient.services;
+package com.client.webClient.services.movies;
 
 import com.client.webClient.beans.DiscoverMovie;
-import com.client.webClient.beans.Greeting;
+import com.client.webClient.beans.FullMovie;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplate;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +13,19 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-public class SearchMovieService {
+public class FullMovieService {
+    @Autowired
     private String serverURL;
     @Autowired
     private SSLUsingRestTemplateConfigurator sslUsingRestTemplateConfigurator;
     @Autowired
-    private DiscoverMovie[] discoverMovies;
+    private FullMovie fullMovie;
 
-    public SearchMovieService(String serverURL) {
-        this.serverURL = serverURL;
-    }
-
-    public DiscoverMovie[] getFromServer(String title) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
+    public FullMovie getFromServer(int id) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         String processedURL=serverURL;
-        if(title==null || title.equals(""))
-        {
-            title="g";
-        }
-        processedURL+="/api/tmdb/search_movie?title="+title;
+        processedURL+="/api/tmdb/get_movie?id="+id;
         RestTemplate restT=new SSLUsingRestTemplate(sslUsingRestTemplateConfigurator);
-        discoverMovies=restT.getForObject(processedURL,DiscoverMovie[].class);
-        return discoverMovies;
+        fullMovie=restT.getForObject(processedURL,FullMovie.class);
+        return fullMovie;
     }
-
 }

@@ -1,5 +1,6 @@
-package com.client.webClient.services;
+package com.client.webClient.services.movies;
 
+import com.client.webClient.beans.DiscoverMovie;
 import com.client.webClient.beans.Greeting;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplate;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
@@ -12,23 +13,24 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-public class GreetingService {
+public class SearchMovieService {
+    @Autowired
     private String serverURL;
     @Autowired
     private SSLUsingRestTemplateConfigurator sslUsingRestTemplateConfigurator;
     @Autowired
-    private Greeting greeting;
+    private DiscoverMovie[] discoverMovies;
 
-    public GreetingService(String serverURL) {
-        this.serverURL = serverURL;
-    }
-
-    public Greeting getFromServer() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
+    public DiscoverMovie[] getFromServer(String title) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         String processedURL=serverURL;
-        processedURL+="/greeting";
+        if(title==null || title.equals(""))
+        {
+            title="g";
+        }
+        processedURL+="/api/tmdb/search_movie?title="+title;
         RestTemplate restT=new SSLUsingRestTemplate(sslUsingRestTemplateConfigurator);
-        greeting=restT.getForObject(processedURL,Greeting.class);
-        return greeting;
+        discoverMovies=restT.getForObject(processedURL,DiscoverMovie[].class);
+        return discoverMovies;
     }
 
 }

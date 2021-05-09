@@ -3,16 +3,15 @@ package com.client.webClient.controllers;
 import com.client.webClient.beans.DiscoverMovie;
 import com.client.webClient.beans.FullMovie;
 import com.client.webClient.forms.FormStringHandler;
-import com.client.webClient.services.FullMovieService;
-import com.client.webClient.services.GenresService;
-import com.client.webClient.services.SearchMovieService;
-import com.client.webClient.services.DiscoverMoviesService;
+import com.client.webClient.services.movies.FullMovieService;
+import com.client.webClient.services.movies.GenresService;
+import com.client.webClient.services.movies.SearchMovieService;
+import com.client.webClient.services.movies.DiscoverMoviesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -52,7 +51,8 @@ public class WebMovie {
         return "hello_movies";
     }
     @PostMapping("/search")
-    public String search(Model model,@ModelAttribute("formStringHandler") FormStringHandler form) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public String search(Model model,@ModelAttribute("formStringHandler") FormStringHandler form,@RequestBody String reqBody) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        System.out.println(reqBody);
         formStringHandler=form;
         discoverMovies= searchMovieService.getFromServer(formStringHandler.getContent());
         model.addAttribute("discoverMovies",discoverMovies);

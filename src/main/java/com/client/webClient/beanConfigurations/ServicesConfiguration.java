@@ -1,6 +1,7 @@
 package com.client.webClient.beanConfigurations;
 
-import com.client.webClient.services.*;
+import com.client.webClient.services.movies.*;
+import com.client.webClient.services.user.LoginService;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,33 +25,39 @@ public class ServicesConfiguration {
     private Resource trustUrl;
     @Value("${trust.store.password}")
     private String trustPassword;
+
     @Bean
     public SSLUsingRestTemplateConfigurator sslUsingRestTemplateConfigurator() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         return new SSLUsingRestTemplateConfigurator(trustUrl,trustPassword);
     }
     @Bean
     public GreetingService greetingService() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
-        return new GreetingService(ourServerUrl);
+        return new GreetingService();
     }
     @Bean
     public DiscoverMoviesService discoverMoviesService()
     {
-        return new DiscoverMoviesService(ourServerUrl);
+        return new DiscoverMoviesService();
     }
     @Bean
     public SearchMovieService searchMovieService()
     {
-        return new SearchMovieService(ourServerUrl);
+        return new SearchMovieService();
     }
     @Bean
     public FullMovieService fullMovieService()
     {
-        return new FullMovieService(ourServerUrl);
+        return new FullMovieService();
     }
     @Bean
     public GenresService genresService()
     {
-        return new GenresService(ourServerUrl);
+        return new GenresService();
+    }
+    @Bean
+    public LoginService loginService()
+    {
+        return new LoginService();
     }
     @PostConstruct
     public void afterInit() throws IOException {

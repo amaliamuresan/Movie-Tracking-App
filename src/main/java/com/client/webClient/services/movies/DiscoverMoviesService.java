@@ -1,4 +1,4 @@
-package com.client.webClient.services;
+package com.client.webClient.services.movies;
 
 import com.client.webClient.beans.DiscoverMovie;
 import com.client.webClient.beans.Greeting;
@@ -15,15 +15,12 @@ import java.security.cert.CertificateException;
 import java.util.Map;
 
 public class DiscoverMoviesService {
+    @Autowired
     private String serverURL;
     @Autowired
     private SSLUsingRestTemplateConfigurator sslUsingRestTemplateConfigurator;
     @Autowired
     private DiscoverMovie[] discoverMovies;
-
-    public DiscoverMoviesService(String serverURL) {
-        this.serverURL = serverURL;
-    }
 
     public DiscoverMovie[] getFromServer() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         String processedURL=serverURL;

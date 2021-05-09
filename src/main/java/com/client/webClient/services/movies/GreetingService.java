@@ -1,9 +1,8 @@
-package com.client.webClient.services;
+package com.client.webClient.services.movies;
 
-import com.client.webClient.beans.FullMovie;
+import com.client.webClient.beans.Greeting;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplate;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,26 +11,21 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.HashMap;
-import java.util.Map;
 
-public class GenresService {
+public class GreetingService {
+    @Autowired
     private String serverURL;
     @Autowired
     private SSLUsingRestTemplateConfigurator sslUsingRestTemplateConfigurator;
     @Autowired
-    private Map<String,String> genres;
+    private Greeting greeting;
 
-    public GenresService(String serverURL) {
-        this.serverURL = serverURL;
-    }
-
-    public Map<String,String> getFromServer() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
+    public Greeting getFromServer() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         String processedURL=serverURL;
-        ObjectMapper objMap=new ObjectMapper();
-        processedURL+="/api/tmdb/get_genres";
+        processedURL+="/greeting";
         RestTemplate restT=new SSLUsingRestTemplate(sslUsingRestTemplateConfigurator);
-        genres=restT.getForObject(processedURL,genres.getClass());
-        return genres;
+        greeting=restT.getForObject(processedURL,Greeting.class);
+        return greeting;
     }
+
 }

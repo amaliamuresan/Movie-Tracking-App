@@ -13,7 +13,7 @@ public class MoviesConfiguration {
     @Bean
     public Map<String,String> genres()
     {
-        return new HashMap<String,String>();
+        return new HashMap<>();
     }
     @Bean
     public DiscoverMovie discoverMovie()

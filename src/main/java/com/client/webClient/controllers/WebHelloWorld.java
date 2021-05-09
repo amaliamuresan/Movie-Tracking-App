@@ -2,7 +2,7 @@ package com.client.webClient.controllers;
 
 import com.client.webClient.beans.Greeting;
 import com.client.webClient.beans.HelloBean;
-import com.client.webClient.services.GreetingService;
+import com.client.webClient.services.movies.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
