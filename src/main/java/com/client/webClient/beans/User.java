@@ -75,4 +75,5 @@ public class User {
     public void setFollowed_users(List<String> followed_users) {
         this.followed_users = followed_users;
     }
+
 }

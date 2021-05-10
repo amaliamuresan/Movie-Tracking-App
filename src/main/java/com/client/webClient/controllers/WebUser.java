@@ -4,7 +4,11 @@ import com.client.webClient.beans.User;
 import com.client.webClient.services.user.LoginService;
 import com.client.webClient.services.user.OtherUserService;
 import com.client.webClient.services.user.RegisterService;
+import com.client.webClient.services.user.WatchListsService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,19 +32,28 @@ public class WebUser {
     @Autowired
     private RegisterService registerService;
     @Autowired
+    private WatchListsService watchListsService;
+    @Autowired
     private User user;
     @Autowired
     private User otherUser;
     @RequestMapping("/login")
+    @ResponseBody
     public String login() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException
     {
-        user=loginService.postToServer("user2@company.com","123456");
-        return "hello_login";
+        loginService.postToServer("user2345@company.com","123456");
+        if(user.getToken()==null)
+        {
+            return "Login error!";
+        }
+        return "Login success!";
     }
     @RequestMapping("/profile/{uid}")
     @ResponseBody
     public User profile(@PathVariable("uid") String uid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
-        otherUser=otherUserService.getfromServer(uid);
+        User otherUser2;
+        otherUser2=otherUserService.getfromServer(uid);
+        BeanUtils.copyProperties(otherUser2,otherUser);
         return otherUser;
     }
     @RequestMapping("/register")
@@ -56,6 +69,70 @@ public class WebUser {
         else
         {
             result="Registration success!";
+        }
+        return result;
+    }
+    @RequestMapping("/addToWatch/{movieid}")
+    @ResponseBody
+    public String addToWatch(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        String result;
+        Map<String,String> map;
+        map=watchListsService.addToWatch(String.valueOf(movieid));
+        if(map.containsKey("Error"))
+        {
+            result="Add Error: "+map.get("Error");
+        }
+        else
+        {
+            result="Add success!";
+        }
+        return result;
+    }
+    @RequestMapping("/addWatched/{movieid}")
+    @ResponseBody
+    public String addWatched(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        String result;
+        Map<String,String> map;
+        map=watchListsService.addWatched(String.valueOf(movieid));
+        if(map.containsKey("Error"))
+        {
+            result="Add Error: "+map.get("Error");
+        }
+        else
+        {
+            result="Add success!";
+        }
+        return result;
+    }
+    @RequestMapping("/removeToWatch/{movieid}")
+    @ResponseBody
+    public String removeToWatch(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        String result;
+        Map<String,String> map;
+        map=watchListsService.removeToWatch(String.valueOf(movieid));
+        if(map.containsKey("Error"))
+        {
+            result="Remove Error: "+map.get("Error");
+        }
+        else
+        {
+            result="Remove success!";
+        }
+        return result;
+    }
+    @RequestMapping("/removeWatched/{movieid}")
+    @ResponseBody
+    public String removeWatched(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        String result;
+        Map<String,String> map;
+        map=watchListsService.removeWatched(String.valueOf(movieid));
+        if(map.containsKey("Error"))
+        {
+            result="Remove Error: "+map.get("Error");
+        }
+        else
+        {
+            result="Remove success!";
         }
         return result;
     }
