@@ -2,6 +2,7 @@ package com.client.webClient.beanConfigurations;
 
 import com.client.webClient.beans.DiscoverMovie;
 import com.client.webClient.beans.FullMovie;
+import com.client.webClient.beans.MinimalMovie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,5 +30,15 @@ public class MoviesConfiguration {
     public FullMovie fullMovie()
     {
         return new FullMovie();
+    }
+    @Bean
+    public MinimalMovie minimalMovie()
+    {
+        return new MinimalMovie();
+    }
+    @Bean
+    public MinimalMovie[] minimalMovies()
+    {
+        return new MinimalMovie[50];
     }
 }

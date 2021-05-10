@@ -3,6 +3,7 @@ package com.client.webClient.services.user;
 import com.client.webClient.beans.User;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplate;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,7 +27,9 @@ public class OtherUserService {
         String processedURL=serverURL;
         processedURL+="/api/users/"+uid;
         RestTemplate restT=new SSLUsingRestTemplate(sslUsingRestTemplateConfigurator);
-        otherUser=restT.getForObject(processedURL,User.class);
+        User otherUser2;
+        otherUser2=restT.getForObject(processedURL,User.class);
+        BeanUtils.copyProperties(otherUser2,otherUser);
         return otherUser;
     }
 }

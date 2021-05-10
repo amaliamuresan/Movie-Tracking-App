@@ -1,10 +1,7 @@
 package com.client.webClient.beanConfigurations;
 
 import com.client.webClient.services.movies.*;
-import com.client.webClient.services.user.LoginService;
-import com.client.webClient.services.user.OtherUserService;
-import com.client.webClient.services.user.RegisterService;
-import com.client.webClient.services.user.WatchListsService;
+import com.client.webClient.services.user.*;
 import com.client.webClient.ssltemplate.SSLUsingRestTemplateConfigurator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -76,6 +73,11 @@ public class ServicesConfiguration {
     public WatchListsService watchListsService()
     {
         return new WatchListsService();
+    }
+    @Bean
+    public WatchListsMoviesService watchListsMoviesService()
+    {
+        return new WatchListsMoviesService();
     }
     @PostConstruct
     public void afterInit() throws IOException {

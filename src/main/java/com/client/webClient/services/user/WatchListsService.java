@@ -31,7 +31,6 @@ public class WatchListsService {
         params.put("uid",user.getUid());
         params.put("movie_id",movieID);
         params.put("token",user.getToken());
-        System.out.println(params);
         String response;
         ObjectMapper om=new ObjectMapper();
         Map<String,String> map=new HashMap<>();

@@ -1,10 +1,9 @@
 package com.client.webClient.controllers;
 
+import com.client.webClient.beans.MinimalMovie;
 import com.client.webClient.beans.User;
-import com.client.webClient.services.user.LoginService;
-import com.client.webClient.services.user.OtherUserService;
-import com.client.webClient.services.user.RegisterService;
-import com.client.webClient.services.user.WatchListsService;
+import com.client.webClient.exceptions.ServerErrorException;
+import com.client.webClient.services.user.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +33,20 @@ public class WebUser {
     @Autowired
     private WatchListsService watchListsService;
     @Autowired
+    private WatchListsMoviesService watchListsMoviesService;
+    @Autowired
     private User user;
     @Autowired
     private User otherUser;
+    @Autowired
+    private MinimalMovie[] minimalMovies;
+
     @RequestMapping("/login")
     @ResponseBody
     public String login() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException
     {
         loginService.postToServer("user2345@company.com","123456");
+        System.out.println("Token:"+user.getToken());
         if(user.getToken()==null)
         {
             return "Login error!";
@@ -135,5 +140,45 @@ public class WebUser {
             result="Remove success!";
         }
         return result;
+    }
+    @RequestMapping("/listToWatch")
+    @ResponseBody
+    public MinimalMovie[] listToWatch() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        try {
+            minimalMovies=watchListsMoviesService.listToWatch();
+        } catch (ServerErrorException e) {
+            System.out.println(e.getErrorMessage());
+        }
+        return minimalMovies;
+    }
+    @RequestMapping("/listWatched")
+    @ResponseBody
+    public MinimalMovie[] listWatched() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        try {
+            minimalMovies=watchListsMoviesService.listWatched();
+        } catch (ServerErrorException e) {
+            System.out.println(e.getErrorMessage());
+        }
+        return minimalMovies;
+    }
+    @RequestMapping("/listToWatch/{uid}")
+    @ResponseBody
+    public MinimalMovie[] listToWatch(@PathVariable("uid") String uid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        try {
+            minimalMovies=watchListsMoviesService.listToWatch(uid);
+        } catch (ServerErrorException e) {
+            System.out.println(e.getErrorMessage());
+        }
+        return minimalMovies;
+    }
+    @RequestMapping("/listWatched/{uid}")
+    @ResponseBody
+    public MinimalMovie[] listWatched(@PathVariable("uid") String uid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+        try {
+            minimalMovies=watchListsMoviesService.listWatched(uid);
+        } catch (ServerErrorException e) {
+            System.out.println(e.getErrorMessage());
+        }
+        return minimalMovies;
     }
 }
