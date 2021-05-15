@@ -15,9 +15,13 @@
 ```
 - Response
 ```json
+Returns all non null user fields excluding password
 {
     "uid": "user_uid",
-    "token": "generated_login_token"
+    "token": "generated_login_token",
+    "email" : "email",
+    ...
+    
 }
 ```
 
@@ -46,10 +50,9 @@ No request body
 - Response
 ```json
 Example
-This will return all not Null user fields
+This will return all not Null user fields excluding password
 {
     "name": "Name",
-    "password": "password",
     "email": "email@gmail.com",
     "username": "username",
     "uid": "user_uid",
@@ -174,6 +177,83 @@ Example
 - ``` https://localhost:8080/api/users/get_watched_movie``` <br/>
 - Request - POST<br/>
 - Everything else the same as above
+
+10.Follow user / Unfollow user<br/>
+- ``` https://localhost:8080/api/users/follow_user``` <br/>
+- ``` https://localhost:8080/api/users/unfollow_user``` <br/>
+- Request - POST
+- the request is following the same pattern as get to watch/watched movie
+- Request - POST<br/>
+```json
+{
+  "logged_uid" : "logged_user_uid",
+  "follow_uid" : "user to follow uid", // unfollow_uid for unfollow option
+  "token" : "logged_user_login_token"
+}
+```
+- Response
+```json
+{
+  "Success" : "User followed successfully"
+}
+
+```
+
+11.Get followed users
+- ``` https://localhost:8080/api/users/get_followed_users``` <br/>
+- Request - GET
+```json
+{
+  "uid" : "logged_user_uid",
+  "token" : "logged_user_login_token"
+}
+```
+- Response
+```json
+List of json objects containting minimal informations about following users
+[
+  {
+    "email" : "emailUserUnu",
+    "uid" : "uidUserUnu",
+    "display_name" : "display_nameUserUnu"
+  },
+  {
+    "email" : "emailUserDoi",
+    "uid" : "uidUserDoi",
+    "display_name" : "display_nameUserDoi"
+  },
+  ...
+]
+```
+
+12.Search users
+- ``` https://localhost:8080/api/users/search_users``` <br/>
+- Request - POST
+```json
+{
+  "uid" : "logged_user_uid",
+  "query" : "querry",
+  "token" : "logged_user_login_token"
+}
+```
+- Response
+```json
+List of json objects containting minimal informations about following users
+[
+  {
+    "email" : "emailUserUnu",
+    "uid" : "uidUserUnu",
+    "display_name" : "display_nameUserUnu"
+  },
+  {
+    "email" : "emailUserDoi",
+    "uid" : "uidUserDoi",
+    "display_name" : "display_nameUserDoi"
+  },
+  ...
+]
+```
+
 
 ### Movie requests
 1.Discover movies by popularity
