@@ -183,7 +183,7 @@ class LoginPage extends StatelessWidget {
     } else {
       if (action is LoginError) {
         print(action.error);
-        Toast.show("Invalid credentials", context,
+        Toast.show(action.error.toString(), context,
             duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
       } else
         Toast.show("App Error", context,

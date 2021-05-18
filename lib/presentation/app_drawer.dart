@@ -32,7 +32,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.account_circle_rounded,
-              color: Color.fromRGBO(238, 108, 77, 1),
+              color: Colors.black87,
             ),
             title: Text('Profile'),
             onTap: () async => {
@@ -50,7 +50,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.home,
-              color: Color.fromRGBO(238, 108, 77, 1),
+              color: Colors.black87,
             ),
             title: Text('Home'),
             onTap: () async => {
@@ -63,7 +63,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.search,
-              color: Color.fromRGBO(238, 108, 77, 1),
+              color: Colors.black87,
             ),
             title: Text('Search users'),
             onTap: () => {
@@ -73,7 +73,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.people_alt_outlined,
-              color: Color.fromRGBO(238, 108, 77, 1),
+              color: Colors.black87,
             ),
             title: Text('Following'),
             onTap: () async => {

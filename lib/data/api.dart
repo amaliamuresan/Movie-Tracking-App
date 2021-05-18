@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
+import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
@@ -12,7 +13,7 @@ class AppApi {
         _client = client;
 
   final http.Client _client;
-  final String ipAddress = '192.168.0.137';
+  final String ipAddress = '192.168.1.3';
 
   Future<AppUser> login({String email, String password}) async {
     final Uri url = Uri(scheme: 'https', host: ipAddress, port: 8080, pathSegments: <String>[
@@ -28,7 +29,7 @@ class AppApi {
       },
       body: jsonEncode(<String, String>{
         'email': email,
-        'password': password,
+        'password': generateMd5(password),
       }),
     );
     if (response.body != null) {
@@ -57,8 +58,8 @@ class AppApi {
       },
       body: jsonEncode(<String, String>{
         'email': email,
-        'password': password,
-        'displayName': displayName,
+        'password': generateMd5(password),
+        'display_name': displayName,
       }),
     );
     if (response.body != null) {
@@ -366,5 +367,9 @@ class AppApi {
       }),
     );
     return uid;
+  }
+
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
   }
 }

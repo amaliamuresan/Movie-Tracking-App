@@ -205,11 +205,13 @@ class SignUpPage extends StatelessWidget {
     print("On response");
     if (action is RegisterSuccessful) {
       print('Register successs!!!!');
-      //Navigator.pushNamed(context, '/home');
+      Toast.show("Account created successfully!", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      Navigator.pushNamed(context, '/login');
     } else {
       if (action is RegisterError) {
         print(action.error);
-        Toast.show("Invalid credentials", context,
+        Toast.show(action.error.toString(), context,
             duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
       } else
         Toast.show("Alt toast", context,
