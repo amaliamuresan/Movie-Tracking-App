@@ -14,7 +14,9 @@
 	<form:form method="POST" action="/movies/search" modelAttribute="formStringHandler">
 	    <form:label path="content">Content</form:label>
 	    <form:input path="content"/>
-	    <input type="submit"/>
+	    <input type="submit" value="Search"/>
 	</form:form>
 </body>
 </html>
+
+

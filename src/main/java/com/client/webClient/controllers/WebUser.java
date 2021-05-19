@@ -2,17 +2,18 @@ package com.client.webClient.controllers;
 
 import com.client.webClient.beans.MinimalMovie;
 import com.client.webClient.beans.User;
+import com.client.webClient.data.ClientData;
 import com.client.webClient.exceptions.ServerErrorException;
+import com.client.webClient.forms.FormLogin;
+import com.client.webClient.forms.FormStringHandler;
 import com.client.webClient.services.user.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -35,23 +36,53 @@ public class WebUser {
     @Autowired
     private WatchListsMoviesService watchListsMoviesService;
     @Autowired
-    private User user;
-    @Autowired
     private User otherUser;
     @Autowired
     private MinimalMovie[] minimalMovies;
+    @Autowired
+    private FormLogin formLogin;
+    @Autowired
+    private User user;
+    @Autowired
+    private FormStringHandler formStringHandler;
 
     @RequestMapping("/login")
-    @ResponseBody
-    public String login() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException
+    public String login(Model model) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException
     {
-        loginService.postToServer("user2345@company.com","123456");
-        System.out.println("Token:"+user.getToken());
-        if(user.getToken()==null)
-        {
-            return "Login error!";
+        //loginService.postToServer("user2345@company.com","123456");
+        //System.out.println("Token:"+user.getToken());
+        //if(user.getToken()==null)
+        //{
+        //    return "login";
+        //}
+        model.addAttribute("formLogin",formLogin);
+        model.addAttribute("errorText","");
+        model.addAttribute("success","false");
+        return "login";
+    }
+    @RequestMapping("/login/process")
+    public String loginProcess(Model model,@ModelAttribute("formLogin") FormLogin form) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException
+    {
+        //loginService.postToServer("user2345@company.com","123456");
+        //System.out.println("Token:"+user.getToken());
+        //if(user.getToken()==null)
+        //{
+        //    return "login";
+        //}
+        formLogin = form;
+        loginService.postToServer(form.getEmail(),form.getPassword());
+        model.addAttribute("formLogin",formLogin);
+        if(user.getToken() == null) {
+            System.out.println("Login error");
+            model.addAttribute("errorText","Invalid combination / temp ban");
         }
-        return "Login success!";
+        else
+        {
+            System.out.println("Login success");
+            model.addAttribute("success","true");
+
+        }
+        return "login";
     }
     @RequestMapping("/profile/{uid}")
     @ResponseBody
@@ -78,8 +109,7 @@ public class WebUser {
         return result;
     }
     @RequestMapping("/addToWatch/{movieid}")
-    @ResponseBody
-    public String addToWatch(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public String addToWatch(Model model,@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         String result;
         Map<String,String> map;
         map=watchListsService.addToWatch(String.valueOf(movieid));
@@ -91,11 +121,11 @@ public class WebUser {
         {
             result="Add success!";
         }
-        return result;
+        model.addAttribute("formStringHandler",formStringHandler);
+        return "search_movies";
     }
     @RequestMapping("/addWatched/{movieid}")
-    @ResponseBody
-    public String addWatched(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public String addWatched(Model model,@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         String result;
         Map<String,String> map;
         map=watchListsService.addWatched(String.valueOf(movieid));
@@ -107,11 +137,11 @@ public class WebUser {
         {
             result="Add success!";
         }
-        return result;
+        model.addAttribute("formStringHandler",formStringHandler);
+        return "search_movies";
     }
     @RequestMapping("/removeToWatch/{movieid}")
-    @ResponseBody
-    public String removeToWatch(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public String removeToWatch(Model model,@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         String result;
         Map<String,String> map;
         map=watchListsService.removeToWatch(String.valueOf(movieid));
@@ -123,11 +153,10 @@ public class WebUser {
         {
             result="Remove success!";
         }
-        return result;
+        return listToWatch(model);
     }
     @RequestMapping("/removeWatched/{movieid}")
-    @ResponseBody
-    public String removeWatched(@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public String removeWatched(Model model,@PathVariable("movieid") int movieid) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         String result;
         Map<String,String> map;
         map=watchListsService.removeWatched(String.valueOf(movieid));
@@ -139,27 +168,27 @@ public class WebUser {
         {
             result="Remove success!";
         }
-        return result;
+        return listWatched(model);
     }
     @RequestMapping("/listToWatch")
-    @ResponseBody
-    public MinimalMovie[] listToWatch() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public String listToWatch(Model model) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         try {
             minimalMovies=watchListsMoviesService.listToWatch();
         } catch (ServerErrorException e) {
             System.out.println(e.getErrorMessage());
         }
-        return minimalMovies;
+        model.addAttribute("discoverMovies",minimalMovies);
+        return "to_watch_list";
     }
     @RequestMapping("/listWatched")
-    @ResponseBody
-    public MinimalMovie[] listWatched() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
+    public String listWatched(Model model) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         try {
             minimalMovies=watchListsMoviesService.listWatched();
         } catch (ServerErrorException e) {
             System.out.println(e.getErrorMessage());
         }
-        return minimalMovies;
+        model.addAttribute("discoverMovies",minimalMovies);
+        return "watched_list";
     }
     @RequestMapping("/listToWatch/{uid}")
     @ResponseBody
@@ -169,6 +198,7 @@ public class WebUser {
         } catch (ServerErrorException e) {
             System.out.println(e.getErrorMessage());
         }
+
         return minimalMovies;
     }
     @RequestMapping("/listWatched/{uid}")

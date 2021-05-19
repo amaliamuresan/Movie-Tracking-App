@@ -6,7 +6,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.core.io.Resource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import sun.net.www.http.HttpClient;
 
 
 import javax.net.ssl.SSLContext;

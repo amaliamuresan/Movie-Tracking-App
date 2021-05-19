@@ -1,5 +1,6 @@
 package com.client.webClient.beanConfigurations;
 
+import com.client.webClient.forms.FormLogin;
 import com.client.webClient.forms.FormStringHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,5 +11,10 @@ public class FormConfiguration {
     public FormStringHandler formStringHandler()
     {
         return new FormStringHandler();
+    }
+    @Bean
+    public FormLogin formLogin()
+    {
+        return new FormLogin();
     }
 }
